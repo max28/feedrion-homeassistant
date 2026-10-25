@@ -66,7 +66,7 @@ ARTICLE = {"id": 101, "feed_id": 11, "feed_title": "Daily Horizon", "title": "He
            "summary": None, "read": False, "saved": False}
 EPISODE = {"show_id": 1, "show_name": "Northwind", "episode_id": 800, "season": 1, "number": 5,
            "name": "Pilot", "aired": "2026-10-01", "aired_at": None, "runtime": 45, "poster_url": None,
-           "remaining": 3, "set_aside": False}
+           "backdrop_url": "https://artworks.example/fanart.jpg", "remaining": 3, "set_aside": False}
 
 
 def mock_api(aioclient_mock: AiohttpClientMocker, *, state: dict | None = None, status: int = 200) -> None:
