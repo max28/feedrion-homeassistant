@@ -198,7 +198,7 @@
         },
         "scope": {
           "name": "Scope",
-          "description": "all, saved, starred, feed:<id> or folder:<id>."
+          "description": "all, saved, starred, feed:ID or folder:ID."
         },
         "limit": {
           "name": "Headlines",
