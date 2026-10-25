@@ -1,0 +1,56 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  tests:
+    # GitHub-hosted by default. A private repository may point CI_RUNS_ON at
+    # its own runner labels (JSON, e.g. ["self-hosted","linux"]); never on a
+    # PUBLIC repository — a pull request from anyone would run on it.
+    runs-on: ${{ fromJSON(vars.CI_RUNS_ON || '"ubuntu-latest"') }}
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - run: python -m pip install -r requirements_test.txt ruff==0.14.0
+      - run: ruff check custom_components tests scripts
+      - run: python -m pytest -q
+      - name: Package (dry run)
+        run: python scripts/package.py --version 0.0.0 --out dist
+
+  hassfest:
+    # Home Assistant's own manifest / translations / services validator. It
+    # runs in a container action, so it stays on GitHub-hosted runners.
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: home-assistant/actions/hassfest@master
+
+  hacs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: hacs/action@main
+        with:
+          category: integration
+          # brands: the icon is submitted to home-assistant/brands separately;
+          # description/topics: GitHub repository settings, set at publication.
+          ignore: brands description topics

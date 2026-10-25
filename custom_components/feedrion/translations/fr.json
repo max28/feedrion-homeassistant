@@ -1,0 +1,210 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connecter Feedrion",
+        "description": "Home Assistant va afficher un code à saisir dans l'app Feedrion. Feedrion Premium est requis.",
+        "data": {
+          "api_url": "Adresse de l'API Feedrion"
+        },
+        "data_description": {
+          "api_url": "Laissez la valeur par défaut sauf indication contraire. https uniquement."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnecter Feedrion",
+        "description": "La session Feedrion de ce Home Assistant a pris fin (elle a été déconnectée depuis l'app). Appairez-le de nouveau avec un nouveau code."
+      }
+    },
+    "progress": {
+      "wait_for_code": "Dans l'app Feedrion, ouvrez Réglages ▸ Intégrations ▸ Appareils connectés et saisissez **{code}** — ou ouvrez {url}. L'app montre ce qui demande l'accès avant que vous n'approuviez."
+    },
+    "error": {
+      "https_required": "L'adresse doit commencer par https://"
+    },
+    "abort": {
+      "cannot_connect": "Feedrion est injoignable.",
+      "expired": "Le code a expiré avant d'être confirmé. Réessayez.",
+      "reauth_successful": "Feedrion est de nouveau connecté."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options Feedrion",
+        "data": {
+          "feeds": "Flux ayant leur propre capteur (et les événements de nouvel article)",
+          "articles": "Articles dans le capteur « derniers articles »",
+          "stock_provider": "Fournisseur de « Mes actions »",
+          "stock_api_key": "Votre clé API chez ce fournisseur",
+          "stock_interval_minutes": "Minutes entre deux cotations"
+        },
+        "data_description": {
+          "feeds": "50 au plus. Seuls ces flux déclenchent feedrion_new_article.",
+          "stock_provider": "Feedrion ne relaie jamais de cours d'actions : Home Assistant cote « Mes actions » lui-même, avec votre propre clé gratuite, directement chez le fournisseur.",
+          "stock_api_key": "Gardée dans Home Assistant et envoyée à ce seul fournisseur.",
+          "stock_interval_minutes": "Jamais sous le plancher du plan gratuit (Twelve Data 15, EODHD 60, Alpha Vantage 180). Home Assistant dépense au plus la moitié de votre allocation du jour ; le téléphone dépense le reste."
+        }
+      }
+    },
+    "error": {
+      "too_many_feeds": "50 flux au plus.",
+      "key_required": "Une clé est nécessaire pour ce fournisseur.",
+      "cannot_connect": "Feedrion est injoignable : la liste des flux est vide."
+    }
+  },
+  "selector": {
+    "stock_provider": {
+      "options": {
+        "twelvedata": "Twelve Data",
+        "alphavantage": "Alpha Vantage",
+        "eodhd": "EODHD"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "unread": {
+        "name": "Articles non lus"
+      },
+      "saved": {
+        "name": "Articles sauvés"
+      },
+      "starred": {
+        "name": "Articles favoris"
+      },
+      "alerts": {
+        "name": "Alertes non vues"
+      },
+      "latest_articles": {
+        "name": "Derniers articles"
+      },
+      "episodes_to_watch": {
+        "name": "Épisodes à voir"
+      },
+      "next_episode": {
+        "name": "Prochain épisode"
+      },
+      "ai_quota": {
+        "name": "Articles IA ce mois-ci"
+      }
+    },
+    "calendar": {
+      "upcoming": {
+        "name": "Épisodes à venir"
+      }
+    },
+    "todo": {
+      "saved_list": {
+        "name": "Sauvés"
+      },
+      "to_watch_list": {
+        "name": "À voir"
+      }
+    }
+  },
+  "issues": {
+    "premium_required": {
+      "title": "Feedrion Premium requis",
+      "description": "Ce compte Feedrion n'est pas (plus) Premium : Home Assistant ne reçoit donc rien. Abonnez-vous sur {pricing_url} ; les capteurs reviennent d'eux-mêmes."
+    }
+  },
+  "exceptions": {
+    "no_entry": {
+      "message": "Aucun compte Feedrion n'est configuré."
+    },
+    "several_entries": {
+      "message": "Plusieurs comptes Feedrion sont configurés : choisissez-en un avec config_entry_id."
+    },
+    "premium_required": {
+      "message": "Feedrion Premium est requis."
+    },
+    "link_required": {
+      "message": "Saisissez un lien (https://…) pour l'ajouter aux « Sauvés »."
+    }
+  },
+  "services": {
+    "mark_read": {
+      "name": "Marquer lu",
+      "description": "Marque des articles comme lus.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Compte",
+          "description": "Le compte Feedrion (utile seulement s'il y en a plusieurs)."
+        },
+        "article_ids": {
+          "name": "Identifiants d'articles",
+          "description": "Issus d'un événement ou du capteur des derniers articles."
+        }
+      }
+    },
+    "mark_all_read": {
+      "name": "Tout marquer lu",
+      "description": "Marque tout comme lu, ou un flux ou un dossier.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Compte",
+          "description": "Le compte Feedrion (utile seulement s'il y en a plusieurs)."
+        },
+        "feed_id": {
+          "name": "Identifiant de flux",
+          "description": "Ce flux seulement."
+        },
+        "folder_id": {
+          "name": "Identifiant de dossier",
+          "description": "Ce dossier seulement."
+        }
+      }
+    },
+    "save_url": {
+      "name": "Sauver une page",
+      "description": "Ajoute une page aux « Sauvés » (lire plus tard).",
+      "fields": {
+        "config_entry_id": {
+          "name": "Compte",
+          "description": "Le compte Feedrion (utile seulement s'il y en a plusieurs)."
+        },
+        "url": {
+          "name": "Lien",
+          "description": "La page à sauver."
+        },
+        "title": {
+          "name": "Titre",
+          "description": "Facultatif."
+        }
+      }
+    },
+    "mark_episode_watched": {
+      "name": "Marquer un épisode vu",
+      "description": "Comme « vu » dans l'app (atteint aussi Trakt et Simkl).",
+      "fields": {
+        "config_entry_id": {
+          "name": "Compte",
+          "description": "Le compte Feedrion (utile seulement s'il y en a plusieurs)."
+        },
+        "episode_id": {
+          "name": "Identifiant d'épisode",
+          "description": "Issu de la liste « À voir » ou des capteurs."
+        }
+      }
+    },
+    "briefing": {
+      "name": "Briefing",
+      "description": "Les derniers titres non lus en un seul texte, pour tts.speak. Les titres masqués le restent.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Compte",
+          "description": "Le compte Feedrion (utile seulement s'il y en a plusieurs)."
+        },
+        "scope": {
+          "name": "Portée",
+          "description": "all, saved, starred, feed:<id> ou folder:<id>."
+        },
+        "limit": {
+          "name": "Titres",
+          "description": "De 1 à 20."
+        }
+      }
+    }
+  }
+}
