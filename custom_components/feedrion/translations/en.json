@@ -1,0 +1,210 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Feedrion",
+        "description": "Home Assistant will show a code to type in the Feedrion app. Feedrion Premium is required.",
+        "data": {
+          "api_url": "Feedrion API address"
+        },
+        "data_description": {
+          "api_url": "Leave the default unless told otherwise. https only."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect Feedrion",
+        "description": "The Feedrion session of this Home Assistant ended (it was disconnected from the app). Pair it again with a new code."
+      }
+    },
+    "progress": {
+      "wait_for_code": "In the Feedrion app, open Settings ▸ Integrations ▸ Connected devices and type **{code}** — or open {url}. The app shows what is asking before you approve."
+    },
+    "error": {
+      "https_required": "The address must start with https://"
+    },
+    "abort": {
+      "cannot_connect": "Feedrion could not be reached.",
+      "expired": "The code expired before it was confirmed. Try again.",
+      "reauth_successful": "Feedrion is connected again."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Feedrion options",
+        "data": {
+          "feeds": "Feeds with their own sensor (and new-article events)",
+          "articles": "Articles in the « latest articles » sensor",
+          "stock_provider": "« Mes actions » provider",
+          "stock_api_key": "Your API key for that provider",
+          "stock_interval_minutes": "Minutes between two quotes"
+        },
+        "data_description": {
+          "feeds": "50 at most. Only these feeds fire feedrion_new_article.",
+          "stock_provider": "Feedrion never relays share prices: Home Assistant quotes « Mes actions » itself, with your own free key, straight from the provider.",
+          "stock_api_key": "Kept in Home Assistant and sent to that provider only.",
+          "stock_interval_minutes": "Never below the free plan's floor (Twelve Data 15, EODHD 60, Alpha Vantage 180). Home Assistant spends at most half your daily allowance; the phone spends the rest."
+        }
+      }
+    },
+    "error": {
+      "too_many_feeds": "50 feeds at most.",
+      "key_required": "A key is needed for this provider.",
+      "cannot_connect": "Feedrion could not be reached: the feed list is empty."
+    }
+  },
+  "selector": {
+    "stock_provider": {
+      "options": {
+        "twelvedata": "Twelve Data",
+        "alphavantage": "Alpha Vantage",
+        "eodhd": "EODHD"
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "unread": {
+        "name": "Unread articles"
+      },
+      "saved": {
+        "name": "Saved articles"
+      },
+      "starred": {
+        "name": "Starred articles"
+      },
+      "alerts": {
+        "name": "Unseen alerts"
+      },
+      "latest_articles": {
+        "name": "Latest articles"
+      },
+      "episodes_to_watch": {
+        "name": "Episodes to watch"
+      },
+      "next_episode": {
+        "name": "Next episode"
+      },
+      "ai_quota": {
+        "name": "AI articles this month"
+      }
+    },
+    "calendar": {
+      "upcoming": {
+        "name": "Upcoming episodes"
+      }
+    },
+    "todo": {
+      "saved_list": {
+        "name": "Saved"
+      },
+      "to_watch_list": {
+        "name": "To watch"
+      }
+    }
+  },
+  "issues": {
+    "premium_required": {
+      "title": "Feedrion Premium required",
+      "description": "This Feedrion account is not Premium (any more), so Home Assistant receives nothing. Subscribe at {pricing_url}; the sensors come back on their own."
+    }
+  },
+  "exceptions": {
+    "no_entry": {
+      "message": "No Feedrion account is set up."
+    },
+    "several_entries": {
+      "message": "Several Feedrion accounts are set up: choose one with config_entry_id."
+    },
+    "premium_required": {
+      "message": "Feedrion Premium is required."
+    },
+    "link_required": {
+      "message": "Type a link (https://…) to save it to « Saved »."
+    }
+  },
+  "services": {
+    "mark_read": {
+      "name": "Mark read",
+      "description": "Marks articles read.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The Feedrion account (needed only with several)."
+        },
+        "article_ids": {
+          "name": "Article ids",
+          "description": "From an event or the latest-articles sensor."
+        }
+      }
+    },
+    "mark_all_read": {
+      "name": "Mark all read",
+      "description": "Marks everything read, or one feed or folder.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The Feedrion account (needed only with several)."
+        },
+        "feed_id": {
+          "name": "Feed id",
+          "description": "Only this feed."
+        },
+        "folder_id": {
+          "name": "Folder id",
+          "description": "Only this folder."
+        }
+      }
+    },
+    "save_url": {
+      "name": "Save a page",
+      "description": "Adds a page to « Saved » (read later).",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The Feedrion account (needed only with several)."
+        },
+        "url": {
+          "name": "Link",
+          "description": "The page to save."
+        },
+        "title": {
+          "name": "Title",
+          "description": "Optional."
+        }
+      }
+    },
+    "mark_episode_watched": {
+      "name": "Mark an episode watched",
+      "description": "Like « vu » in the app (reaches Trakt and Simkl too).",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The Feedrion account (needed only with several)."
+        },
+        "episode_id": {
+          "name": "Episode id",
+          "description": "From the « To watch » list or the sensors."
+        }
+      }
+    },
+    "briefing": {
+      "name": "Briefing",
+      "description": "The newest unread headlines as one text, for tts.speak. Masked titles stay masked.",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The Feedrion account (needed only with several)."
+        },
+        "scope": {
+          "name": "Scope",
+          "description": "all, saved, starred, feed:<id> or folder:<id>."
+        },
+        "limit": {
+          "name": "Headlines",
+          "description": "1 to 20."
+        }
+      }
+    }
+  }
+}

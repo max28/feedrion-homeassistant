@@ -1,0 +1,12 @@
+{
+  "domain": "feedrion",
+  "name": "Feedrion",
+  "codeowners": ["@max28"],
+  "config_flow": true,
+  "documentation": "https://github.com/max28/feedrion-homeassistant",
+  "integration_type": "service",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/max28/feedrion-homeassistant/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
