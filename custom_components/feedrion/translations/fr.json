@@ -198,7 +198,7 @@
         },
         "scope": {
           "name": "Portée",
-          "description": "all, saved, starred, feed:<id> ou folder:<id>."
+          "description": "all, saved, starred, feed:ID ou folder:ID."
         },
         "limit": {
           "name": "Titres",
