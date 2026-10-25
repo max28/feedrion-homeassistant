@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import json
+from pathlib import Path
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import Platform
@@ -46,9 +48,33 @@ class FeedrionRuntime:
 type FeedrionConfigEntry = ConfigEntry[FeedrionRuntime]
 
 
+CARDS_URL = "/feedrion_static/feedrion-cards.js"
+CARDS_FILE = Path(__file__).parent / "frontend" / "feedrion-cards.js"
+
+
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     async_setup_services(hass)
+    await _async_register_cards(hass)
     return True
+
+
+async def _async_register_cards(hass: HomeAssistant) -> None:
+    """Serve the dashboard cards and load them in every browser: nothing to
+    add by hand in Settings ▸ Dashboards ▸ Resources."""
+    if hass.http is None or "frontend" not in hass.config.components:
+        return
+    from homeassistant.components.frontend import add_extra_js_url  # noqa: PLC0415
+    from homeassistant.components.http import StaticPathConfig  # noqa: PLC0415
+
+    def _version() -> str:
+        manifest = json.loads((Path(__file__).parent / "manifest.json").read_text(encoding="utf-8"))
+        return str(manifest.get("version", "0"))
+
+    version = await hass.async_add_executor_job(_version)
+    # cache_headers=False: the ?v= query is what makes a release reach the
+    # browser, and an update must not wait for a month-long cache to expire.
+    await hass.http.async_register_static_paths([StaticPathConfig(CARDS_URL, str(CARDS_FILE), False)])
+    add_extra_js_url(hass, f"{CARDS_URL}?v={version}")
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: FeedrionConfigEntry) -> bool:

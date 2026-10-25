@@ -19,7 +19,11 @@ message and comment as if it already were.
 the config entry), `config_flow.py` (device-code pairing, options),
 `coordinator.py` (state every 5 min, events every 60 s, « Mes actions »),
 `stocks.py` (provider quotes with the reader's key), one file per platform,
-`services.py`. Tests in `tests/` with `pytest-homeassistant-custom-component`.
+`services.py`, `frontend/feedrion-cards.js` (the dashboard cards, one
+dependency-free module served by `async_setup` and added with
+`add_extra_js_url`). Tests in `tests/` with
+`pytest-homeassistant-custom-component`; the cards' helpers in `tests/js/`
+(`node --test`).
 
 ## Rules that must not drift
 - **Premium as a whole**: a 402 raises the `premium_required` repair issue and
@@ -35,9 +39,14 @@ the config entry), `config_flow.py` (device-code pairing, options),
   free plan's floor. The key is sent to that provider only.
 - **Masked stays masked**: anti-spoil titles reach sensors, events and the
   briefing already masked; never "unmask" anything locally.
+- **Cards read entities, never Feedrion**: what they draw must already be in
+  a state or an attribute (big lists are `_unrecorded_attributes`). Entity text
+  goes through `textContent`, links through `safeUrl` (http(s) only). They
+  show the TheTVDB and MET Norway attributions.
 - **https only** for the API address.
 - The API contract lives in the Feedrion API (`/integrations/v1/*`): additive
   changes only; tolerate unknown fields.
 
 ## Before pushing
-`ruff check custom_components tests scripts` and `python -m pytest -q`.
+`ruff check custom_components tests scripts`, `python -m pytest -q` and
+`node --test tests/js/*.test.cjs`.
