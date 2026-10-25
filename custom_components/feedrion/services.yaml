@@ -1,0 +1,74 @@
+mark_read:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: feedrion
+    article_ids:
+      required: true
+      example: "[12345]"
+      selector:
+        object: {}
+mark_all_read:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: feedrion
+    feed_id:
+      selector:
+        number:
+          min: 1
+          max: 2147483647
+          mode: box
+    folder_id:
+      selector:
+        number:
+          min: 1
+          max: 2147483647
+          mode: box
+save_url:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: feedrion
+    url:
+      required: true
+      example: "https://example.com/article"
+      selector:
+        text:
+          type: url
+    title:
+      selector:
+        text:
+mark_episode_watched:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: feedrion
+    episode_id:
+      required: true
+      selector:
+        number:
+          min: 1
+          max: 2147483647
+          mode: box
+briefing:
+  fields:
+    config_entry_id:
+      selector:
+        config_entry:
+          integration: feedrion
+    scope:
+      default: all
+      example: "folder:12"
+      selector:
+        text:
+    limit:
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 20
