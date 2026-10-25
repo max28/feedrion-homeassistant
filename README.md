@@ -49,6 +49,39 @@ newest unread headlines as one text — ready for `tts.speak`:
     message: "{{ briefing.text }}"
 ```
 
+## Cards
+
+The integration ships five dashboard cards drawn like the Feedrion phone
+widgets. They are loaded automatically — nothing to add under Dashboards ▸
+Resources — and appear in the card picker as « Feedrion · … ». They only read
+the entities above: a card never calls Feedrion.
+
+| Card | Shows |
+|------|-------|
+| `custom:feedrion-tv-card` | « À voir » (`mode: to_watch`) or « À venir » (`mode: upcoming`): the show's background and poster behind each row, episodes left or air date, one show's episodes of the same day grouped |
+| `custom:feedrion-weather-card` | A `weather.feedrion_…` city on a sky that follows the weather, ↑ max ↓ min, the next days (or hours) |
+| `custom:feedrion-markets-card` | Currency pairs and « Mes actions », price and change; `rotate: true` turns one at a time like the phone row |
+| `custom:feedrion-articles-card` | The newest unread articles, with images; anti-spoil titles stay masked |
+| `custom:feedrion-unread-card` | One counter (unread by default, any Feedrion sensor with `entity`) |
+
+```yaml
+type: custom:feedrion-tv-card
+mode: to_watch          # or upcoming
+max_items: 6
+show_set_aside: false   # set-aside shows are left out, like the widget
+show_watched_button: false  # two taps mark the episode watched (reaches Trakt / Simkl)
+```
+
+```yaml
+type: custom:feedrion-weather-card
+entity: weather.feedrion_orleans
+forecast: daily         # hourly or none
+forecast_items: 5
+```
+
+A row of the TV card opens the show in Feedrion. The TheTVDB and MET Norway
+attributions are shown, as their licences require.
+
 ## « Mes actions »
 
 Feedrion never relays share prices: your free plan with the provider licenses
@@ -91,6 +124,7 @@ cosign verify-blob feedrion.zip --bundle feedrion.zip.sigstore.json \
 python -m pip install -r requirements_test.txt ruff==0.14.0
 ruff check custom_components tests scripts
 python -m pytest -q
+node --test tests/js/*.test.cjs
 ```
 
 ## License

@@ -30,6 +30,13 @@ jobs:
       - run: python -m pip install -r requirements_test.txt ruff==0.14.0
       - run: ruff check custom_components tests scripts
       - run: python -m pytest -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Cards (syntax + helpers)
+        run: |
+          node --check custom_components/feedrion/frontend/feedrion-cards.js
+          node --test tests/js/*.test.cjs
       - name: Package (dry run)
         run: python scripts/package.py --version 0.0.0 --out dist
 

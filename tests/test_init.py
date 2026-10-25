@@ -30,7 +30,12 @@ async def test_entities(hass: HomeAssistant, entry: MockConfigEntry, aioclient_m
     latest = hass.states.get("sensor.feedrion_latest_articles")
     assert latest.state == "1"
     assert latest.attributes["articles"][0]["title"] == "Hello"
-    assert hass.states.get("sensor.feedrion_next_episode").state == "2026-10-29T01:00:00+00:00"
+    next_episode = hass.states.get("sensor.feedrion_next_episode")
+    assert next_episode.state == "2026-10-29T01:00:00+00:00"
+    # The lists the dashboard cards draw.
+    assert next_episode.attributes["upcoming"][0]["show"] == "Northwind"
+    to_watch = hass.states.get("sensor.feedrion_episodes_to_watch").attributes["next"][0]
+    assert to_watch["remaining"] == 3 and to_watch["backdrop_url"] == "https://artworks.example/fanart.jpg"
     ai = hass.states.get("sensor.feedrion_ai_articles_this_month")
     assert ai.state == "120" and ai.attributes["quota"] == 1200
     assert hass.states.get("sensor.feedrion_euro_dollar").state == "1.08"

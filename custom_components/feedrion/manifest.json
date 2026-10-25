@@ -1,6 +1,7 @@
 {
   "domain": "feedrion",
   "name": "Feedrion",
+  "after_dependencies": ["frontend", "http"],
   "codeowners": ["@max28"],
   "config_flow": true,
   "documentation": "https://github.com/max28/feedrion-homeassistant",

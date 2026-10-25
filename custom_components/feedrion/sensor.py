@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from . import FeedrionConfigEntry
 
 MAX_ARTICLE_ATTRS = 50
+MAX_EPISODE_ATTRS = 30
 
 
 def _article(a: dict[str, Any]) -> dict[str, Any]:
@@ -44,12 +45,20 @@ def _episode(e: dict[str, Any] | None) -> dict[str, Any] | None:
         "number": e.get("number"),
         "name": e.get("name"),
         "aired": e.get("aired"),
+        "aired_at": e.get("aired_at"),
+        "remaining": e.get("remaining"),
+        "set_aside": e.get("set_aside", False),
         "poster_url": e.get("poster_url"),
+        "backdrop_url": e.get("backdrop_url"),
     }
 
 
 class _ValueSensor(FeedrionEntity, SensorEntity):
     """A sensor whose value is read from the state with a function."""
+
+    # The lists the dashboard cards draw: current state only, never one copy
+    # per update in the recorder's history.
+    _unrecorded_attributes = frozenset({"articles", "next", "upcoming"})
 
     def __init__(
         self, coordinator: FeedrionCoordinator, entry_id: str, key: str, value: Callable[[dict], Any],
@@ -133,7 +142,7 @@ def _fixed_sensors(c: FeedrionCoordinator, eid: str) -> list[SensorEntity]:
             translation_key="episodes_to_watch", icon="mdi:television-play", unit="episodes",
             attrs=lambda d: {
                 "shows_to_watch": tv(d).get("shows_to_watch"),
-                "next": [_episode(e) for e in d["to_watch"][:20]],
+                "next": [_episode(e) for e in d["to_watch"][:MAX_EPISODE_ATTRS]],
             },
         ),
         _ValueSensor(
@@ -141,7 +150,10 @@ def _fixed_sensors(c: FeedrionCoordinator, eid: str) -> list[SensorEntity]:
             lambda d: _next_air(tv(d).get("next_upcoming")) if tv(d).get("enabled") else _MISSING,
             translation_key="next_episode", icon="mdi:calendar-star",
             device_class=SensorDeviceClass.TIMESTAMP, state_class=None,
-            attrs=lambda d: _episode(tv(d).get("next_upcoming")) or {},
+            attrs=lambda d: {
+                **(_episode(tv(d).get("next_upcoming")) or {}),
+                "upcoming": [_episode(e) for e in d["upcoming"][:MAX_EPISODE_ATTRS]],
+            },
         ),
         _ValueSensor(
             c, eid, "ai_quota",
