@@ -58,6 +58,7 @@ jobs:
       - uses: hacs/action@main
         with:
           category: integration
-          # brands: the icon is submitted to home-assistant/brands separately;
-          # description/topics: GitHub repository settings, set at publication.
-          ignore: brands description topics
+          # brands: the icon ships in custom_components/feedrion/brand/ (read by
+          # Home Assistant 2026.3+), not in home-assistant/brands, which this
+          # check looks at.
+          ignore: brands
