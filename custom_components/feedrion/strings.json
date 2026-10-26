@@ -11,13 +11,17 @@
           "api_url": "Leave the default unless told otherwise. https only."
         }
       },
+      "code": {
+        "title": "Type this code in the Feedrion app",
+        "description": "In the Feedrion app, open Settings ▸ Integrations ▸ Connected devices and type **{code}** — or open {url}. The app shows what is asking before you approve.\n\nOnce approved in the app, come back here and submit."
+      },
       "reauth_confirm": {
         "title": "Reconnect Feedrion",
         "description": "The Feedrion session of this Home Assistant ended (it was disconnected from the app). Pair it again with a new code."
       }
     },
     "progress": {
-      "wait_for_code": "In the Feedrion app, open Settings ▸ Integrations ▸ Connected devices and type **{code}** — or open {url}. The app shows what is asking before you approve."
+      "wait_for_code": "Waiting for the Feedrion app to approve **{code}**. In the app: Settings ▸ Integrations ▸ Connected devices, or {url}."
     },
     "error": {
       "https_required": "The address must start with https://"
@@ -25,7 +29,8 @@
     "abort": {
       "cannot_connect": "Feedrion could not be reached.",
       "expired": "The code expired before it was confirmed. Try again.",
-      "reauth_successful": "Feedrion is connected again."
+      "reauth_successful": "Feedrion is connected again.",
+      "pairing_failed": "Feedrion refused the pairing. Details are in the Home Assistant logs (search for “feedrion”)."
     }
   },
   "options": {
