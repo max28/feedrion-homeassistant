@@ -37,7 +37,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.13"
+          python-version: "3.14"
       - run: python -m pip install -r requirements_test.txt
       - run: python -m pytest -q
       - run: python scripts/package.py --version "$VERSION" --out dist
