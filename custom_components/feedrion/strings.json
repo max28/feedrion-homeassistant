@@ -20,11 +20,9 @@
         "description": "The Feedrion session of this Home Assistant ended (it was disconnected from the app). Pair it again with a new code."
       }
     },
-    "progress": {
-      "wait_for_code": "Waiting for the Feedrion app to approve **{code}**. In the app: Settings ▸ Integrations ▸ Connected devices, or {url}."
-    },
     "error": {
-      "https_required": "The address must start with https://"
+      "https_required": "The address must start with https://",
+      "not_approved_yet": "Not approved yet. Type the code in the Feedrion app, approve, then submit again."
     },
     "abort": {
       "cannot_connect": "Feedrion could not be reached.",

@@ -28,19 +28,6 @@ ME = {"kind": "homeassistant", "display_name": "Max", "language": "fr", "premium
       "pricing_url": "https://feedrion.example/pricing"}
 
 
-async def _run_until_done(hass: HomeAssistant, flow_id: str) -> None:
-    """Wait for the progress task, then continue the flow as the frontend does
-    when it receives SHOW_PROGRESS_DONE."""
-    for _ in range(20):
-        await hass.async_block_till_done()
-        flows = [f for f in hass.config_entries.flow.async_progress() if f["flow_id"] == flow_id]
-        if not flows:
-            return
-        if flows[0]["step_id"] != "wait":
-            await hass.config_entries.flow.async_configure(flow_id)
-    raise AssertionError("pairing never finished")
-
-
 async def _show_code(hass: HomeAssistant) -> dict:
     result = await hass.config_entries.flow.async_init(DOMAIN, context={"source": config_entries.SOURCE_USER})
     assert result["type"] is FlowResultType.FORM
@@ -75,9 +62,11 @@ async def test_approved_while_away_finishes_on_submit(
     assert start[2]["kind"] == "homeassistant"
 
 
-async def test_submitted_before_approval_waits_then_finishes(
+async def test_submitted_before_approval_keeps_the_form(
     hass: HomeAssistant, aioclient_mock: AiohttpClientMocker,
 ) -> None:
+    """Pressed too early: the form comes back with an error, never a progress
+    screen (which is what freezes while the reader is in the app)."""
     aioclient_mock.post(f"{API}/integrations/v1/pair/start", json=START)
     aioclient_mock.post(f"{API}/integrations/v1/pair/poll", json=APPROVED)
     aioclient_mock.get(f"{API}/integrations/v1/me", json=ME)
@@ -90,12 +79,34 @@ async def test_submitted_before_approval_waits_then_finishes(
          patch("custom_components.feedrion.async_setup_entry", return_value=True):
         result = await _show_code(hass)
         result = await hass.config_entries.flow.async_configure(result["flow_id"], {})
-        assert result["type"] is FlowResultType.SHOW_PROGRESS
-        assert result["step_id"] == "wait"
-        assert hass.config_entries.async_entries(DOMAIN) == []
+        assert result["type"] is FlowResultType.FORM
+        assert result["step_id"] == "code"
+        assert result["errors"] == {"base": "not_approved_yet"}
+        assert result["description_placeholders"]["code"] == "ABCD-EFGH"
         approved.set()
-        await _run_until_done(hass, result["flow_id"])
+        await hass.async_block_till_done()
+        result = await hass.config_entries.flow.async_configure(result["flow_id"], {})
+    assert result["type"] is FlowResultType.CREATE_ENTRY
     assert len(hass.config_entries.async_entries(DOMAIN)) == 1
+
+
+async def test_closing_the_dialog_stops_polling(
+    hass: HomeAssistant, aioclient_mock: AiohttpClientMocker,
+) -> None:
+    aioclient_mock.post(f"{API}/integrations/v1/pair/start", json=START)
+    aioclient_mock.post(f"{API}/integrations/v1/pair/poll", json={"status": "pending"})
+    never = asyncio.Event()
+
+    async def forever(_seconds: float) -> None:
+        await never.wait()
+
+    with patch("custom_components.feedrion.config_flow._pause", side_effect=forever):
+        result = await _show_code(hass)
+        flow = hass.config_entries.flow._progress[result["flow_id"]]
+        task = flow._task
+        hass.config_entries.flow.async_abort(result["flow_id"])
+        await hass.async_block_till_done()
+    assert task.cancelled()
 
 
 async def test_http_is_refused(hass: HomeAssistant) -> None:
