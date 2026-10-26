@@ -1,0 +1,14 @@
+{
+  "name": "feedrion-ha-screenshots",
+  "private": true,
+  "description": "Renders the README / showcase pictures of the Feedrion dashboard cards from invented data.",
+  "type": "module",
+  "scripts": {
+    "fonts": "./fetch-fonts.sh",
+    "render": "node render.mjs"
+  },
+  "devDependencies": {
+    "@mdi/js": "7.4.47",
+    "playwright": "1.56.1"
+  }
+}

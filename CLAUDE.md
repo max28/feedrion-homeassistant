@@ -17,11 +17,14 @@ message and comment as if it already were.
 ## Layout
 `custom_components/feedrion/`: `api.py` (client, token rotation persisted to
 the config entry), `config_flow.py` (device-code pairing, options),
-`coordinator.py` (state every 5 min, events every 60 s, « Mes actions »),
+`coordinator.py` (state every 5 min, events every 60 s, My stocks),
 `stocks.py` (provider quotes with the reader's key), one file per platform,
 `services.py`, `frontend/feedrion-cards.js` (the dashboard cards, one
 dependency-free module served by `async_setup` and added with
-`add_extra_js_url`). Tests in `tests/` with
+`add_extra_js_url`). `scripts/screenshots/render.mjs` draws `docs/images/cards-<lang>.webp`
+(README and feedrion.com) from invented data with the real card module; the
+showcase copies them, so re-render after a visual change to the cards.
+Tests in `tests/` with
 `pytest-homeassistant-custom-component`; the cards' helpers in `tests/js/`
 (`node --test`).
 

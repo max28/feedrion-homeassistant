@@ -2,7 +2,9 @@
 
 A [Home Assistant](https://www.home-assistant.io) integration for
 [Feedrion](https://feedrion.com): your feeds, your TV shows, your cities'
-weather, your currencies and « Mes actions », as entities, events and actions.
+weather, your currencies and your stocks, as entities, events and actions.
+
+![Feedrion cards on a Home Assistant dashboard: episodes to watch, upcoming episodes, weather, currencies and the unread counter](docs/images/cards-en.webp)
 
 **Requires Feedrion Premium.** A connected account that is not Premium shows a
 repair notice and its sensors go unavailable until it is.
@@ -15,12 +17,12 @@ repair notice and its sensors go unavailable until it is.
 | `sensor.feedrion_<folder>_unread` | One per folder |
 | `sensor.feedrion_<feed>_unread` | One per feed you pick in the options (50 at most) |
 | `sensor.feedrion_latest_articles` | The newest unread articles (titles, links, images) in its attributes |
-| `sensor.feedrion_episodes_to_watch`, `sensor.feedrion_next_episode` | Séries extension |
+| `sensor.feedrion_episodes_to_watch`, `sensor.feedrion_next_episode` | TV shows extension |
 | `calendar.feedrion_upcoming_episodes` | Announced episodes (timed when the broadcast hour is known) |
-| `todo.feedrion_saved`, `todo.feedrion_to_watch` | Check an article off = read and out of « Saved »; check an episode off = watched (reaches Trakt and Simkl too). Add a link to « Saved » by typing it. |
-| `weather.feedrion_<city>` | Each city of the Météo extension, with daily and hourly forecasts (MET Norway, CC BY 4.0) |
-| `sensor.feedrion_<pair>` | Each currency pair of the Bourse extension |
-| `sensor.feedrion_<stock>` | « Mes actions », **quoted by Home Assistant itself with your own key** (see below) |
+| `todo.feedrion_saved`, `todo.feedrion_to_watch` | Check an article off = read and out of Saved; check an episode off = watched (reaches Trakt and Simkl too). Add a link to Saved by typing it. |
+| `weather.feedrion_<city>` | Each city of the Weather extension, with daily and hourly forecasts (MET Norway, CC BY 4.0) |
+| `sensor.feedrion_<pair>` | Each currency pair of the Stocks & currencies extension |
+| `sensor.feedrion_<stock>` | My stocks, **quoted by Home Assistant itself with your own key** (see below) |
 | `sensor.feedrion_ai_articles_this_month` | AI option usage |
 
 ### Events
@@ -53,14 +55,14 @@ newest unread headlines as one text — ready for `tts.speak`:
 
 The integration ships five dashboard cards drawn like the Feedrion phone
 widgets. They are loaded automatically — nothing to add under Dashboards ▸
-Resources — and appear in the card picker as « Feedrion · … ». They only read
+Resources — and appear in the card picker as "Feedrion · …". They only read
 the entities above: a card never calls Feedrion.
 
 | Card | Shows |
 |------|-------|
-| `custom:feedrion-tv-card` | « À voir » (`mode: to_watch`) or « À venir » (`mode: upcoming`): the show's background and poster behind each row, episodes left or air date, one show's episodes of the same day grouped |
+| `custom:feedrion-tv-card` | Episodes to watch (`mode: to_watch`) or upcoming (`mode: upcoming`): the show's background and poster behind each row, episodes left or air date, one show's episodes of the same day grouped |
 | `custom:feedrion-weather-card` | A `weather.feedrion_…` city on a sky that follows the weather, ↑ max ↓ min, the next days (or hours) |
-| `custom:feedrion-markets-card` | Currency pairs and « Mes actions », price and change; `rotate: true` turns one at a time like the phone row |
+| `custom:feedrion-markets-card` | Currency pairs and My stocks, price and change; `rotate: true` turns one at a time like the phone row |
 | `custom:feedrion-articles-card` | The newest unread articles, with images; anti-spoil titles stay masked |
 | `custom:feedrion-unread-card` | One counter (unread by default, any Feedrion sensor with `entity`) |
 
@@ -79,10 +81,11 @@ forecast: daily         # hourly or none
 forecast_items: 5
 ```
 
+The cards follow Home Assistant's language (20 languages, English otherwise).
 A row of the TV card opens the show in Feedrion. The TheTVDB and MET Norway
 attributions are shown, as their licences require.
 
-## « Mes actions »
+## My stocks
 
 Feedrion never relays share prices: your free plan with the provider licenses
 personal use, not redistribution. So the server only gives Home Assistant the
@@ -90,6 +93,18 @@ list of your symbols, and Home Assistant quotes them itself, straight from the
 provider, with **your** key (Twelve Data, Alpha Vantage or EODHD — options of
 the integration). The key stays in Home Assistant. At most half of the key's
 daily allowance is spent here; your phone spends the rest.
+
+## Pictures
+
+The pictures in `docs/images/` are drawn from invented data (shows, posters
+and prices that exist nowhere) by the real card module, one per language:
+
+```bash
+cd scripts/screenshots
+npm install && npx playwright install chromium
+./fetch-fonts.sh     # optional, the fonts every script renders with
+node render.mjs      # or: node render.mjs en fr
+```
 
 ## Install
 
@@ -100,14 +115,14 @@ daily allowance is spent here; your phone spends the rest.
    Connected devices and type it. The app shows what is asking before you
    approve. No password ever reaches Home Assistant.
 4. Options: the feeds that get their own sensor and events, how many articles
-   the « latest » sensor holds, and the « Mes actions » provider and key.
+   the "latest articles" sensor holds, and the provider and key for My stocks.
 
 Removing the integration signs this Home Assistant out of Feedrion; the app can
 also disconnect it (Home Assistant then asks to pair again).
 
 ## Privacy
 
-Home Assistant calls Feedrion (https only) and, for « Mes actions » only, the
+Home Assistant calls Feedrion (https only) and, for My stocks only, the
 quote provider you chose. Feedrion never connects to your Home Assistant.
 
 ## Verify a download

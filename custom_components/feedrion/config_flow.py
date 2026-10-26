@@ -149,7 +149,7 @@ class FeedrionConfigFlow(ConfigFlow, domain=DOMAIN):
 
 
 class FeedrionOptionsFlow(OptionsFlow):
-    """Which feeds become entities, how many articles, and « Mes actions »."""
+    """Which feeds become entities, how many articles, and My stocks."""
 
     async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
         errors: dict[str, str] = {}

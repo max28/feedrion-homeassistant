@@ -1,9 +1,8 @@
-"""Two to-do lists: « Sauvés » (read later) and « À voir » (next episodes).
+"""Two to-do lists: Saved (read later) and To watch (next episodes).
 
 Checking an item off is the app's own action: a saved article is marked read
-and leaves « Sauvés »; an episode is marked watched (and reaches Trakt, Simkl
-and any paired media server like any other « vu »). Adding to « Sauvés » takes
-a link. Nothing else is editable from here.
+and leaves Saved; an episode is marked watched (and reaches Trakt, Simkl and
+any paired media server like any other watch). Adding to Saved takes a link. Nothing else is editable from here.
 """
 
 from __future__ import annotations

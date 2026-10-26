@@ -1,4 +1,4 @@
-"""« Mes actions », quoted by Home Assistant itself with the reader's OWN key.
+"""My stocks, quoted by Home Assistant itself with the reader's OWN key.
 
 Feedrion never relays a share price (the reader's free plan licenses personal
 use, not redistribution), so the server only hands over the list of symbols.

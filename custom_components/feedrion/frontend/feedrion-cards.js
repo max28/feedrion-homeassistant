@@ -4,9 +4,9 @@
  * Five cards drawn like the Feedrion phone widgets, reading only what the
  * integration's entities already hold — a card never calls Feedrion itself:
  *
- *   custom:feedrion-tv-card       « À voir » / « À venir » (Séries extension)
- *   custom:feedrion-weather-card  a city of the Météo extension, sky included
- *   custom:feedrion-markets-card  currency pairs and « Mes actions »
+ *   custom:feedrion-tv-card       "To watch" / "Upcoming" (TV shows extension)
+ *   custom:feedrion-weather-card  a city of the Weather extension, sky included
+ *   custom:feedrion-markets-card  currency pairs and "My stocks"
  *   custom:feedrion-articles-card the newest unread articles
  *   custom:feedrion-unread-card   one counter
  *
@@ -27,7 +27,7 @@ const STRINGS = {
     upcoming: "Upcoming episodes",
     to_watch_empty: "Nothing left to watch",
     upcoming_empty: "Nothing announced",
-    tv_disabled: "The Séries extension is off",
+    tv_disabled: "The TV shows extension is off",
     remaining_one: "1 left",
     remaining_other: "{n} left",
     episodes_range: "Episodes {a} to {b}",
@@ -39,8 +39,8 @@ const STRINGS = {
     articles: "Unread",
     articles_empty: "All caught up",
     masked: "Anti-spoil",
-    markets: "Markets",
-    markets_empty: "No currency or share followed",
+    markets: "Stocks & currencies",
+    markets_empty: "No currency or stock followed",
     no_quote: "No quote yet",
     last_close: "Last price {d}",
     unread: "Unread articles",
@@ -76,6 +76,492 @@ const STRINGS = {
     max: "max",
     min: "min",
   },
+  es: {
+    to_watch: "Episodios por ver",
+    upcoming: "Próximos episodios",
+    to_watch_empty: "No queda nada por ver",
+    upcoming_empty: "Ningún episodio anunciado",
+    tv_disabled: "La extensión Series está desactivada",
+    remaining_one: "Queda 1",
+    remaining_other: "Quedan {n}",
+    episodes_range: "Episodios {a} a {b}",
+    today: "Hoy",
+    tomorrow: "Mañana",
+    watched: "Visto",
+    watched_confirm: "¿Visto?",
+    tvdb: "Datos: TheTVDB",
+    articles: "Sin leer",
+    articles_empty: "Todo leído",
+    masked: "Anti-spoiler",
+    markets: "Bolsa y divisas",
+    markets_empty: "Ninguna divisa ni acción seguida",
+    no_quote: "Aún sin cotización",
+    last_close: "Última cotización {d}",
+    unread: "Artículos sin leer",
+    unavailable: "No disponible",
+    not_found: "Entidad no encontrada: {e}",
+    max: "máx",
+    min: "mín",
+  },
+  de: {
+    to_watch: "Folgen zum Ansehen",
+    upcoming: "Kommende Folgen",
+    to_watch_empty: "Nichts mehr anzusehen",
+    upcoming_empty: "Keine Folge angekündigt",
+    tv_disabled: "Die Erweiterung Serien ist deaktiviert",
+    remaining_one: "Noch 1",
+    remaining_other: "Noch {n}",
+    episodes_range: "Folgen {a} bis {b}",
+    today: "Heute",
+    tomorrow: "Morgen",
+    watched: "Gesehen",
+    watched_confirm: "Gesehen?",
+    tvdb: "Daten: TheTVDB",
+    articles: "Ungelesen",
+    articles_empty: "Alles gelesen",
+    masked: "Anti-Spoiler",
+    markets: "Börse & Währungen",
+    markets_empty: "Keine Währung oder Aktie verfolgt",
+    no_quote: "Noch kein Kurs",
+    last_close: "Letzter Kurs {d}",
+    unread: "Ungelesene Artikel",
+    unavailable: "Nicht verfügbar",
+    not_found: "Entität nicht gefunden: {e}",
+    max: "max",
+    min: "min",
+  },
+  pt: {
+    to_watch: "Episódios para ver",
+    upcoming: "Próximos episódios",
+    to_watch_empty: "Nada mais para ver",
+    upcoming_empty: "Nenhum episódio anunciado",
+    tv_disabled: "A extensão Séries está desativada",
+    remaining_one: "Falta 1",
+    remaining_other: "Faltam {n}",
+    episodes_range: "Episódios {a} a {b}",
+    today: "Hoje",
+    tomorrow: "Amanhã",
+    watched: "Visto",
+    watched_confirm: "Visto?",
+    tvdb: "Dados: TheTVDB",
+    articles: "Não lidos",
+    articles_empty: "Tudo lido",
+    masked: "Anti-spoiler",
+    markets: "Bolsa e moedas",
+    markets_empty: "Nenhuma moeda ou ação seguida",
+    no_quote: "Ainda sem cotação",
+    last_close: "Última cotação {d}",
+    unread: "Artigos não lidos",
+    unavailable: "Indisponível",
+    not_found: "Entidade não encontrada: {e}",
+    max: "máx",
+    min: "mín",
+  },
+  ru: {
+    to_watch: "Серии к просмотру",
+    upcoming: "Скоро выйдут",
+    to_watch_empty: "Смотреть больше нечего",
+    upcoming_empty: "Новых серий не объявлено",
+    tv_disabled: "Расширение «Сериалы» отключено",
+    remaining_one: "Осталась 1",
+    remaining_other: "Осталось: {n}",
+    episodes_range: "Серии {a}–{b}",
+    today: "Сегодня",
+    tomorrow: "Завтра",
+    watched: "Просмотрено",
+    watched_confirm: "Просмотрено?",
+    tvdb: "Данные: TheTVDB",
+    articles: "Непрочитанные",
+    articles_empty: "Всё прочитано",
+    masked: "Антиспойлер",
+    markets: "Биржа и валюты",
+    markets_empty: "Нет отслеживаемых валют и акций",
+    no_quote: "Котировки пока нет",
+    last_close: "Последняя цена {d}",
+    unread: "Непрочитанные статьи",
+    unavailable: "Недоступно",
+    not_found: "Объект не найден: {e}",
+    max: "макс",
+    min: "мин",
+  },
+  ja: {
+    to_watch: "未視聴のエピソード",
+    upcoming: "今後のエピソード",
+    to_watch_empty: "未視聴はありません",
+    upcoming_empty: "発表されたエピソードはありません",
+    tv_disabled: "テレビドラマ拡張機能はオフです",
+    remaining_one: "残り1話",
+    remaining_other: "残り{n}話",
+    episodes_range: "第{a}話〜第{b}話",
+    today: "今日",
+    tomorrow: "明日",
+    watched: "視聴済み",
+    watched_confirm: "視聴済み？",
+    tvdb: "データ：TheTVDB",
+    articles: "未読",
+    articles_empty: "すべて既読",
+    masked: "ネタバレ防止",
+    markets: "株式と為替",
+    markets_empty: "フォロー中の通貨・銘柄はありません",
+    no_quote: "まだ相場がありません",
+    last_close: "最終価格 {d}",
+    unread: "未読の記事",
+    unavailable: "利用できません",
+    not_found: "エンティティが見つかりません：{e}",
+    max: "最高",
+    min: "最低",
+  },
+  zh: {
+    to_watch: "待看剧集",
+    upcoming: "即将播出",
+    to_watch_empty: "没有待看的剧集",
+    upcoming_empty: "暂无公布的剧集",
+    tv_disabled: "电视剧扩展已关闭",
+    remaining_one: "剩 1 集",
+    remaining_other: "剩 {n} 集",
+    episodes_range: "第 {a} 至 {b} 集",
+    today: "今天",
+    tomorrow: "明天",
+    watched: "已看",
+    watched_confirm: "已看？",
+    tvdb: "数据：TheTVDB",
+    articles: "未读",
+    articles_empty: "全部已读",
+    masked: "防剧透",
+    markets: "股票与汇率",
+    markets_empty: "未关注任何货币或股票",
+    no_quote: "暂无报价",
+    last_close: "最新价格 {d}",
+    unread: "未读文章",
+    unavailable: "不可用",
+    not_found: "未找到实体：{e}",
+    max: "最高",
+    min: "最低",
+  },
+  hi: {
+    to_watch: "देखने के लिए एपिसोड",
+    upcoming: "आने वाले एपिसोड",
+    to_watch_empty: "देखने को कुछ नहीं बचा",
+    upcoming_empty: "कोई एपिसोड घोषित नहीं",
+    tv_disabled: "टीवी सीरीज़ एक्सटेंशन बंद है",
+    remaining_one: "1 बाकी",
+    remaining_other: "{n} बाकी",
+    episodes_range: "एपिसोड {a} से {b}",
+    today: "आज",
+    tomorrow: "कल",
+    watched: "देखा",
+    watched_confirm: "देख लिया?",
+    tvdb: "डेटा: TheTVDB",
+    articles: "अपठित",
+    articles_empty: "सब पढ़ लिया",
+    masked: "एंटी-स्पॉइलर",
+    markets: "शेयर और मुद्राएँ",
+    markets_empty: "कोई मुद्रा या शेयर फ़ॉलो नहीं",
+    no_quote: "अभी कोई भाव नहीं",
+    last_close: "अंतिम भाव {d}",
+    unread: "अपठित लेख",
+    unavailable: "उपलब्ध नहीं",
+    not_found: "एंटिटी नहीं मिली: {e}",
+    max: "अधिकतम",
+    min: "न्यूनतम",
+  },
+  bn: {
+    to_watch: "দেখার মতো পর্ব",
+    upcoming: "আসন্ন পর্ব",
+    to_watch_empty: "দেখার আর কিছু নেই",
+    upcoming_empty: "কোনো পর্ব ঘোষিত হয়নি",
+    tv_disabled: "টিভি সিরিজ এক্সটেনশন বন্ধ আছে",
+    remaining_one: "১টি বাকি",
+    remaining_other: "{n}টি বাকি",
+    episodes_range: "পর্ব {a} থেকে {b}",
+    today: "আজ",
+    tomorrow: "আগামীকাল",
+    watched: "দেখা হয়েছে",
+    watched_confirm: "দেখা হয়েছে?",
+    tvdb: "তথ্য: TheTVDB",
+    articles: "অপঠিত",
+    articles_empty: "সব পড়া হয়েছে",
+    masked: "অ্যান্টি-স্পয়লার",
+    markets: "শেয়ার ও মুদ্রা",
+    markets_empty: "কোনো মুদ্রা বা শেয়ার অনুসরণ করা হয়নি",
+    no_quote: "এখনো কোনো দর নেই",
+    last_close: "সর্বশেষ দর {d}",
+    unread: "অপঠিত নিবন্ধ",
+    unavailable: "অনুপলব্ধ",
+    not_found: "এন্টিটি পাওয়া যায়নি: {e}",
+    max: "সর্বোচ্চ",
+    min: "সর্বনিম্ন",
+  },
+  id: {
+    to_watch: "Episode untuk ditonton",
+    upcoming: "Episode mendatang",
+    to_watch_empty: "Tidak ada lagi yang perlu ditonton",
+    upcoming_empty: "Belum ada episode yang diumumkan",
+    tv_disabled: "Ekstensi Serial TV nonaktif",
+    remaining_one: "Sisa 1",
+    remaining_other: "Sisa {n}",
+    episodes_range: "Episode {a} sampai {b}",
+    today: "Hari ini",
+    tomorrow: "Besok",
+    watched: "Sudah ditonton",
+    watched_confirm: "Sudah ditonton?",
+    tvdb: "Data: TheTVDB",
+    articles: "Belum dibaca",
+    articles_empty: "Semua sudah dibaca",
+    masked: "Anti-spoiler",
+    markets: "Saham & mata uang",
+    markets_empty: "Tidak ada mata uang atau saham yang diikuti",
+    no_quote: "Belum ada harga",
+    last_close: "Harga terakhir {d}",
+    unread: "Artikel belum dibaca",
+    unavailable: "Tidak tersedia",
+    not_found: "Entitas tidak ditemukan: {e}",
+    max: "maks",
+    min: "min",
+  },
+  ar: {
+    to_watch: "حلقات للمشاهدة",
+    upcoming: "الحلقات القادمة",
+    to_watch_empty: "لم يبقَ شيء للمشاهدة",
+    upcoming_empty: "لا توجد حلقات معلنة",
+    tv_disabled: "إضافة المسلسلات معطّلة",
+    remaining_one: "بقيت 1",
+    remaining_other: "بقي {n}",
+    episodes_range: "الحلقات {a} إلى {b}",
+    today: "اليوم",
+    tomorrow: "غدًا",
+    watched: "شوهدت",
+    watched_confirm: "شوهدت؟",
+    tvdb: "البيانات: TheTVDB",
+    articles: "غير مقروءة",
+    articles_empty: "قرأت كل شيء",
+    masked: "منع الحرق",
+    markets: "البورصة والعملات",
+    markets_empty: "لا تتابع أي عملة أو سهم",
+    no_quote: "لا يوجد سعر بعد",
+    last_close: "آخر سعر {d}",
+    unread: "مقالات غير مقروءة",
+    unavailable: "غير متاح",
+    not_found: "الكيان غير موجود: {e}",
+    max: "الأعلى",
+    min: "الأدنى",
+  },
+  ur: {
+    to_watch: "دیکھنے کے لیے اقساط",
+    upcoming: "آنے والی اقساط",
+    to_watch_empty: "دیکھنے کو کچھ باقی نہیں",
+    upcoming_empty: "کوئی قسط اعلان شدہ نہیں",
+    tv_disabled: "ٹی وی سیریز ایکسٹینشن بند ہے",
+    remaining_one: "1 باقی",
+    remaining_other: "{n} باقی",
+    episodes_range: "اقساط {a} تا {b}",
+    today: "آج",
+    tomorrow: "کل",
+    watched: "دیکھ لی",
+    watched_confirm: "دیکھ لی؟",
+    tvdb: "ڈیٹا: TheTVDB",
+    articles: "غیر پڑھے",
+    articles_empty: "سب پڑھ لیا",
+    masked: "اینٹی اسپوائلر",
+    markets: "اسٹاک اور کرنسیاں",
+    markets_empty: "کوئی کرنسی یا اسٹاک فالو نہیں",
+    no_quote: "ابھی کوئی قیمت نہیں",
+    last_close: "آخری قیمت {d}",
+    unread: "غیر پڑھے مضامین",
+    unavailable: "دستیاب نہیں",
+    not_found: "اینٹٹی نہیں ملی: {e}",
+    max: "زیادہ",
+    min: "کم",
+  },
+  nl: {
+    to_watch: "Te kijken afleveringen",
+    upcoming: "Komende afleveringen",
+    to_watch_empty: "Niets meer te kijken",
+    upcoming_empty: "Geen aflevering aangekondigd",
+    tv_disabled: "De extensie Series staat uit",
+    remaining_one: "Nog 1",
+    remaining_other: "Nog {n}",
+    episodes_range: "Afleveringen {a} tot {b}",
+    today: "Vandaag",
+    tomorrow: "Morgen",
+    watched: "Gezien",
+    watched_confirm: "Gezien?",
+    tvdb: "Gegevens: TheTVDB",
+    articles: "Ongelezen",
+    articles_empty: "Alles gelezen",
+    masked: "Anti-spoiler",
+    markets: "Beurs & valuta",
+    markets_empty: "Geen valuta of aandeel gevolgd",
+    no_quote: "Nog geen koers",
+    last_close: "Laatste koers {d}",
+    unread: "Ongelezen artikelen",
+    unavailable: "Niet beschikbaar",
+    not_found: "Entiteit niet gevonden: {e}",
+    max: "max",
+    min: "min",
+  },
+  it: {
+    to_watch: "Episodi da vedere",
+    upcoming: "Prossimi episodi",
+    to_watch_empty: "Niente da vedere",
+    upcoming_empty: "Nessun episodio annunciato",
+    tv_disabled: "L'estensione Serie TV è disattivata",
+    remaining_one: "Ne manca 1",
+    remaining_other: "Ne mancano {n}",
+    episodes_range: "Episodi da {a} a {b}",
+    today: "Oggi",
+    tomorrow: "Domani",
+    watched: "Visto",
+    watched_confirm: "Visto?",
+    tvdb: "Dati: TheTVDB",
+    articles: "Da leggere",
+    articles_empty: "Tutto letto",
+    masked: "Anti-spoiler",
+    markets: "Borsa e valute",
+    markets_empty: "Nessuna valuta o azione seguita",
+    no_quote: "Ancora nessuna quotazione",
+    last_close: "Ultima quotazione {d}",
+    unread: "Articoli da leggere",
+    unavailable: "Non disponibile",
+    not_found: "Entità non trovata: {e}",
+    max: "max",
+    min: "min",
+  },
+  ko: {
+    to_watch: "볼 에피소드",
+    upcoming: "방영 예정 에피소드",
+    to_watch_empty: "볼 에피소드가 없습니다",
+    upcoming_empty: "발표된 에피소드가 없습니다",
+    tv_disabled: "TV 시리즈 확장 기능이 꺼져 있습니다",
+    remaining_one: "1개 남음",
+    remaining_other: "{n}개 남음",
+    episodes_range: "{a}~{b}화",
+    today: "오늘",
+    tomorrow: "내일",
+    watched: "시청함",
+    watched_confirm: "시청했나요?",
+    tvdb: "데이터: TheTVDB",
+    articles: "읽지 않음",
+    articles_empty: "모두 읽음",
+    masked: "스포일러 방지",
+    markets: "주식 및 환율",
+    markets_empty: "팔로우 중인 통화나 주식이 없습니다",
+    no_quote: "아직 시세 없음",
+    last_close: "최종 가격 {d}",
+    unread: "읽지 않은 기사",
+    unavailable: "사용할 수 없음",
+    not_found: "엔티티를 찾을 수 없음: {e}",
+    max: "최고",
+    min: "최저",
+  },
+  pl: {
+    to_watch: "Odcinki do obejrzenia",
+    upcoming: "Nadchodzące odcinki",
+    to_watch_empty: "Nie ma nic do obejrzenia",
+    upcoming_empty: "Brak zapowiedzianych odcinków",
+    tv_disabled: "Rozszerzenie Seriale jest wyłączone",
+    remaining_one: "Został 1",
+    remaining_other: "Zostało: {n}",
+    episodes_range: "Odcinki {a}–{b}",
+    today: "Dziś",
+    tomorrow: "Jutro",
+    watched: "Obejrzane",
+    watched_confirm: "Obejrzane?",
+    tvdb: "Dane: TheTVDB",
+    articles: "Nieprzeczytane",
+    articles_empty: "Wszystko przeczytane",
+    masked: "Antyspoiler",
+    markets: "Giełda i waluty",
+    markets_empty: "Nie obserwujesz żadnej waluty ani akcji",
+    no_quote: "Brak notowania",
+    last_close: "Ostatni kurs {d}",
+    unread: "Nieprzeczytane artykuły",
+    unavailable: "Niedostępne",
+    not_found: "Nie znaleziono encji: {e}",
+    max: "maks.",
+    min: "min.",
+  },
+  vi: {
+    to_watch: "Tập cần xem",
+    upcoming: "Tập sắp chiếu",
+    to_watch_empty: "Không còn gì để xem",
+    upcoming_empty: "Chưa có tập nào được công bố",
+    tv_disabled: "Tiện ích Phim truyền hình đang tắt",
+    remaining_one: "Còn 1",
+    remaining_other: "Còn {n}",
+    episodes_range: "Tập {a} đến {b}",
+    today: "Hôm nay",
+    tomorrow: "Ngày mai",
+    watched: "Đã xem",
+    watched_confirm: "Đã xem?",
+    tvdb: "Dữ liệu: TheTVDB",
+    articles: "Chưa đọc",
+    articles_empty: "Đã đọc hết",
+    masked: "Chống spoil",
+    markets: "Chứng khoán & tiền tệ",
+    markets_empty: "Chưa theo dõi tiền tệ hay cổ phiếu nào",
+    no_quote: "Chưa có giá",
+    last_close: "Giá gần nhất {d}",
+    unread: "Bài viết chưa đọc",
+    unavailable: "Không khả dụng",
+    not_found: "Không tìm thấy thực thể: {e}",
+    max: "cao",
+    min: "thấp",
+  },
+  uk: {
+    to_watch: "Серії до перегляду",
+    upcoming: "Незабаром вийдуть",
+    to_watch_empty: "Дивитися більше нічого",
+    upcoming_empty: "Нових серій не оголошено",
+    tv_disabled: "Розширення «Серіали» вимкнено",
+    remaining_one: "Залишилась 1",
+    remaining_other: "Залишилось: {n}",
+    episodes_range: "Серії {a}–{b}",
+    today: "Сьогодні",
+    tomorrow: "Завтра",
+    watched: "Переглянуто",
+    watched_confirm: "Переглянуто?",
+    tvdb: "Дані: TheTVDB",
+    articles: "Непрочитані",
+    articles_empty: "Усе прочитано",
+    masked: "Антиспойлер",
+    markets: "Біржа та валюти",
+    markets_empty: "Немає відстежуваних валют і акцій",
+    no_quote: "Котирування ще немає",
+    last_close: "Остання ціна {d}",
+    unread: "Непрочитані статті",
+    unavailable: "Недоступно",
+    not_found: "Об'єкт не знайдено: {e}",
+    max: "макс",
+    min: "мін",
+  },
+  tr: {
+    to_watch: "İzlenecek bölümler",
+    upcoming: "Yaklaşan bölümler",
+    to_watch_empty: "İzlenecek bir şey kalmadı",
+    upcoming_empty: "Duyurulan bölüm yok",
+    tv_disabled: "Diziler uzantısı kapalı",
+    remaining_one: "1 kaldı",
+    remaining_other: "{n} kaldı",
+    episodes_range: "{a}–{b}. bölümler",
+    today: "Bugün",
+    tomorrow: "Yarın",
+    watched: "İzlendi",
+    watched_confirm: "İzlendi mi?",
+    tvdb: "Veriler: TheTVDB",
+    articles: "Okunmamış",
+    articles_empty: "Hepsi okundu",
+    masked: "Spoiler koruması",
+    markets: "Borsa ve döviz",
+    markets_empty: "Takip edilen döviz veya hisse yok",
+    no_quote: "Henüz fiyat yok",
+    last_close: "Son fiyat {d}",
+    unread: "Okunmamış makaleler",
+    unavailable: "Kullanılamıyor",
+    not_found: "Varlık bulunamadı: {e}",
+    max: "en yüksek",
+    min: "en düşük",
+  },
 };
 
 function lang(hass) {
@@ -105,7 +591,7 @@ function pad2(n) {
   return String(n).padStart(2, "0");
 }
 
-/** « S01E05 », « S02 · Épisodes 3 à 5 » for a grouped row. */
+/** "S01E05", or "S02" for a grouped row ("Episodes 3 to 5" follows). */
 function episodeCode(e) {
   const s = `S${pad2(Number(e.season) || 0)}`;
   if (e.number_to && e.number_to !== e.number) return s;
@@ -135,8 +621,8 @@ function dayKey(d) {
 }
 
 /**
- * « À venir » groups the episodes of one show airing the same day into one
- * row (« Épisodes 3 à 5 »), like the app's tab and the phone widget.
+ * "Upcoming" groups the episodes of one show airing the same day into one
+ * row ("Episodes 3 to 5"), like the app's tab and the phone widget.
  */
 function groupUpcoming(episodes) {
   const out = [];
@@ -155,7 +641,7 @@ function groupUpcoming(episodes) {
   return out;
 }
 
-/** « Aujourd'hui 21:00 », « Demain », « mar. 28 oct. ». */
+/** "Today 21:00", "Tomorrow", "Tue 28 Oct". */
 function airLabel(hass, e, now) {
   const air = airDate(e);
   if (!air) return "";
@@ -178,7 +664,7 @@ function airLabel(hass, e, now) {
   return label;
 }
 
-/** The second line of a TV row: « S01E05 · Pilot » or « S02 · Épisodes 3 à 5 ». */
+/** The second line of a TV row: "S01E05 · Pilot" or "S02 · Episodes 3 to 5". */
 function episodeLine(hass, e) {
   if (e.number_to && e.number_to !== e.number) {
     return `${episodeCode(e)} · ${t(hass, "episodes_range", { a: e.number, b: e.number_to })}`;
@@ -427,7 +913,7 @@ class FeedrionBaseCard extends Element_ {
   }
 }
 
-// ── « À voir » / « À venir » ─────────────────────────────────────────────────
+// ── "To watch" / "Upcoming" ──────────────────────────────────────────────────
 
 const TV_CSS = `
   .rows { display: flex; flex-direction: column; gap: 6px; }
@@ -461,8 +947,8 @@ class FeedrionTvCard extends FeedrionBaseCard {
     return {
       schema: [
         { name: "mode", required: true, selector: { select: { mode: "dropdown", options: [
-          { value: "to_watch", label: "To watch / À voir" },
-          { value: "upcoming", label: "Upcoming / À venir" },
+          { value: "to_watch", label: "To watch" },
+          { value: "upcoming", label: "Upcoming" },
         ] } } },
         { name: "title", selector: { text: {} } },
         { name: "max_items", selector: { number: { min: 1, max: 30, mode: "box" } } },
@@ -565,7 +1051,7 @@ class FeedrionTvCard extends FeedrionBaseCard {
   }
 
   /** Two taps: the first arms it, the second marks the episode watched —
-   * a « vu » reaches Trakt and Simkl, one stray tap must not send it. */
+   * a watch reaches Trakt and Simkl, one stray tap must not send it. */
   _seenButton(e) {
     const btn = h("button", { class: "seen", type: "button" }, t(this._hass, "watched"));
     let timer = null;
@@ -601,7 +1087,7 @@ class FeedrionTvCard extends FeedrionBaseCard {
   }
 }
 
-// ── Météo ────────────────────────────────────────────────────────────────────
+// ── Weather ──────────────────────────────────────────────────────────────────
 
 const WEATHER_CSS = `
   ha-card { padding: 0; color: #fff; border: 0; }
@@ -634,9 +1120,9 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
       schema: [
         { name: "entity", required: true, selector: { entity: { filter: { integration: "feedrion", domain: "weather" } } } },
         { name: "forecast", selector: { select: { mode: "dropdown", options: [
-          { value: "daily", label: "Days / Jours" },
-          { value: "hourly", label: "Hours / Heures" },
-          { value: "none", label: "None / Aucune" },
+          { value: "daily", label: "Days" },
+          { value: "hourly", label: "Hours" },
+          { value: "none", label: "None" },
         ] } } },
         { name: "forecast_items", selector: { number: { min: 1, max: 8, mode: "box" } } },
       ],
@@ -773,7 +1259,7 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
   }
 }
 
-// ── Bourse & devises ─────────────────────────────────────────────────────────
+// ── Stocks & currencies ──────────────────────────────────────────────────────
 
 const MARKETS_CSS = `
   .list { display: flex; flex-direction: column; }
@@ -830,7 +1316,7 @@ class FeedrionMarketsCard extends FeedrionBaseCard {
     clearInterval(this._timer);
     this._timer = null;
     if (!this._config.rotate || !this.isConnected) return;
-    // The phone's « Bourse » row turns every 5 s.
+    // The phone's "Stocks & currencies" row turns every 5 s.
     this._timer = setInterval(() => {
       this._index += 1;
       this._render();
@@ -842,8 +1328,8 @@ class FeedrionMarketsCard extends FeedrionBaseCard {
     if (Array.isArray(configured) && configured.length) {
       return configured.map((e) => (typeof e === "string" ? e : e && e.entity)).filter(Boolean);
     }
-    // Every Feedrion instrument: currency pairs carry `change_pct`, « Mes
-    // actions » `provider` too.
+    // Every Feedrion instrument: currency pairs carry `change_pct`, "My
+    // stocks" `provider` too.
     return feedrionEntities(this._hass, (id, st) => id.startsWith("sensor.") && st.attributes
       && "symbol" in st.attributes && "change_pct" in st.attributes);
   }
@@ -989,7 +1475,7 @@ class FeedrionArticlesCard extends FeedrionBaseCard {
   }
 }
 
-// ── Compteur ─────────────────────────────────────────────────────────────────
+// ── Counter ──────────────────────────────────────────────────────────────────
 
 const UNREAD_CSS = `
   .tile { display: flex; align-items: center; gap: 12px; }
@@ -1049,11 +1535,11 @@ class FeedrionUnreadCard extends FeedrionBaseCard {
 // ── Registration ─────────────────────────────────────────────────────────────
 
 const CARDS = [
-  ["feedrion-tv-card", FeedrionTvCard, "Feedrion · Séries", "« À voir » or « À venir », like the phone widget."],
-  ["feedrion-weather-card", FeedrionWeatherCard, "Feedrion · Météo", "A city with its sky, like the phone widget."],
-  ["feedrion-markets-card", FeedrionMarketsCard, "Feedrion · Bourse & devises", "Currency pairs and « Mes actions »."],
+  ["feedrion-tv-card", FeedrionTvCard, "Feedrion · TV shows", "Episodes to watch or upcoming, like the phone widget."],
+  ["feedrion-weather-card", FeedrionWeatherCard, "Feedrion · Weather", "A city with its sky, like the phone widget."],
+  ["feedrion-markets-card", FeedrionMarketsCard, "Feedrion · Stocks & currencies", "Currency pairs and My stocks."],
   ["feedrion-articles-card", FeedrionArticlesCard, "Feedrion · Articles", "The newest unread articles."],
-  ["feedrion-unread-card", FeedrionUnreadCard, "Feedrion · Compteur", "One Feedrion counter."],
+  ["feedrion-unread-card", FeedrionUnreadCard, "Feedrion · Counter", "One Feedrion counter."],
 ];
 
 if (typeof customElements !== "undefined") {
