@@ -51,9 +51,22 @@ test("the sky follows the phone widget's families", () => {
 });
 
 test("an unknown language falls back to English", () => {
-  assert.equal(cards.t({ locale: { language: "de" } }, "watched"), "Watched");
+  assert.equal(cards.t({ locale: { language: "he" } }, "watched"), "Watched");
+  assert.equal(cards.t({ locale: { language: "zh-Hans" } }, "tomorrow"), "明天");
   assert.equal(cards.t(fr, "remaining_other", { n: 3 }), "3 restants");
-  assert.deepEqual(Object.keys(cards.STRINGS.fr).sort(), Object.keys(cards.STRINGS.en).sort());
+});
+
+test("the cards speak the app's 20 languages, every key in each", () => {
+  const langs = ["en", "fr", "es", "de", "pt", "ru", "ja", "zh", "hi", "bn", "id", "ar", "ur", "nl", "it",
+    "ko", "pl", "vi", "uk", "tr"];
+  assert.deepEqual(Object.keys(cards.STRINGS).sort(), [...langs].sort());
+  const keys = Object.keys(cards.STRINGS.en).sort();
+  for (const l of langs) {
+    assert.deepEqual(Object.keys(cards.STRINGS[l]).sort(), keys, l);
+    for (const k of ["remaining_other", "episodes_range", "last_close", "not_found"]) {
+      for (const v of (cards.STRINGS.en[k].match(/\{\w+\}/g) || [])) assert.ok(cards.STRINGS[l][k].includes(v), `${l}.${k}`);
+    }
+  }
 });
 
 test("a change is signed, a missing one is nothing", () => {

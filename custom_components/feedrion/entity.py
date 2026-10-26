@@ -1,4 +1,4 @@
-"""Base entity: every entity belongs to one « Feedrion » service device."""
+"""Base entity: every entity belongs to one "Feedrion" service device."""
 
 from __future__ import annotations
 

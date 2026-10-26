@@ -1,4 +1,4 @@
-"""« À venir »: the episodes announced for the shows the reader follows."""
+"""Upcoming: the episodes announced for the shows the reader follows."""
 
 from __future__ import annotations
 

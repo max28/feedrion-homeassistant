@@ -1,4 +1,4 @@
-"""Sensors: counters, latest articles, TV shows, AI quota, currencies, « Mes actions »."""
+"""Sensors: counters, latest articles, TV shows, AI quota, currencies, My stocks."""
 
 from __future__ import annotations
 
@@ -209,7 +209,7 @@ def _currency_sensor(c: FeedrionCoordinator, eid: str, item: dict) -> SensorEnti
 
 
 class PersonalStockSensor(FeedrionEntity, SensorEntity):
-    """One of « Mes actions », quoted here with the reader's own key."""
+    """One of My stocks, quoted here with the reader's own key."""
 
     _attr_state_class = SensorStateClass.MEASUREMENT
     _attr_icon = "mdi:chart-line"

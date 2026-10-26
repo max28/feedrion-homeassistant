@@ -1,4 +1,4 @@
-"""Data coordinators: Feedrion's state, the event poll, and « Mes actions »."""
+"""Data coordinators: Feedrion's state, the event poll, and My stocks."""
 
 from __future__ import annotations
 
@@ -145,7 +145,7 @@ class FeedrionEvents:
 
 
 class StocksCoordinator(DataUpdateCoordinator[dict[str, Quote]]):
-    """Quotes « Mes actions » with the reader's own key, within half its
+    """Quotes My stocks with the reader's own key, within half its
     daily allowance (the phone spends the other half)."""
 
     config_entry: ConfigEntry

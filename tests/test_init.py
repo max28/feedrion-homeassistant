@@ -48,7 +48,7 @@ async def test_entities(hass: HomeAssistant, entry: MockConfigEntry, aioclient_m
     assert hass.states.get("todo.feedrion_saved").state == "1"
     assert hass.states.get("calendar.feedrion_upcoming_episodes") is not None
 
-    # « Mes actions » is never quoted without the reader's own key.
+    # My stocks are never quoted without the reader's own key.
     assert hass.states.get("sensor.feedrion_apple") is None
     assert not any("twelvedata" in str(call[1]) for call in aioclient_mock.mock_calls)
 
@@ -145,7 +145,7 @@ async def test_actions(hass: HomeAssistant, entry: MockConfigEntry, aioclient_mo
     response = await hass.services.async_call(DOMAIN, "briefing", {"limit": 3}, blocking=True, return_response=True)
     assert response["text"] == "Daily Horizon : Hello."
 
-    # Checking off « À voir » is the app's own « vu ».
+    # Checking off To watch is the app's own "watched".
     await hass.services.async_call(
         "todo", "update_item", {"item": "800", "status": "completed"},
         target={"entity_id": "todo.feedrion_to_watch"}, blocking=True,
