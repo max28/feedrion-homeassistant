@@ -10,7 +10,7 @@ left by the frontend reacting to "done", and the reader typically leaves this
 tab for the Feedrion app: a phone that put Home Assistant in the background
 misses that event and the dialog then waits for ever, although the session
 already arrived. A submit button survives that; submitting before approving
-falls back to a progress screen, watched by a frontend that is in front.
+shows the same form again with an error, never a progress screen.
 """
 
 from __future__ import annotations
@@ -108,34 +108,31 @@ class FeedrionConfigFlow(ConfigFlow, domain=DOMAIN):
         return await self.async_step_code()
 
     async def async_step_code(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """The code, and a button the reader presses once they approved it."""
-        assert self._start is not None and self._task is not None
-        if user_input is None:
-            return self.async_show_form(
-                step_id="code",
-                description_placeholders={
-                    "code": self._start["user_code"],
-                    "url": self._start["verification_url"],
-                },
-            )
-        if self._task.done():
-            return await (self.async_step_finish() if self._session else self.async_step_failed())
-        return await self.async_step_wait()
+        """The code, and a button the reader presses once they approved it.
 
-    async def async_step_wait(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
-        """Submitted before the app approved: wait here, in front of the reader."""
+        Pressed too early, the same form comes back with an error rather than
+        a progress screen: a progress screen is exactly what freezes when the
+        reader leaves for the app (see the module docstring)."""
         assert self._start is not None and self._task is not None
-        if not self._task.done():
-            return self.async_show_progress(
-                step_id="wait",
-                progress_action="wait_for_code",
-                description_placeholders={
-                    "code": self._start["user_code"],
-                    "url": self._start["verification_url"],
-                },
-                progress_task=self._task,
-            )
-        return self.async_show_progress_done(next_step_id="finish" if self._session else "failed")
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            if self._task.done():
+                return await (self.async_step_finish() if self._session else self.async_step_failed())
+            errors["base"] = "not_approved_yet"
+        return self.async_show_form(
+            step_id="code",
+            description_placeholders={
+                "code": self._start["user_code"],
+                "url": self._start["verification_url"],
+            },
+            errors=errors,
+        )
+
+    @callback
+    def async_remove(self) -> None:
+        """The dialog was closed: stop polling for a code nobody will use."""
+        if self._task is not None and not self._task.done():
+            self._task.cancel()
 
     async def _wait(self, client: FeedrionClient) -> None:
         try:

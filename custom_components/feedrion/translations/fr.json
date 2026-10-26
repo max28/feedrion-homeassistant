@@ -20,11 +20,9 @@
         "description": "La session Feedrion de ce Home Assistant a pris fin (elle a été déconnectée depuis l'app). Appairez-le de nouveau avec un nouveau code."
       }
     },
-    "progress": {
-      "wait_for_code": "En attente de l'approbation de **{code}** dans l'app Feedrion : Réglages ▸ Intégrations ▸ Appareils connectés, ou {url}."
-    },
     "error": {
-      "https_required": "L'adresse doit commencer par https://"
+      "https_required": "L'adresse doit commencer par https://",
+      "not_approved_yet": "Pas encore approuvé. Saisissez le code dans l'app Feedrion, approuvez, puis validez de nouveau."
     },
     "abort": {
       "cannot_connect": "Feedrion est injoignable.",
