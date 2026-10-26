@@ -3,11 +3,20 @@
 Home Assistant asks Feedrion for a code; the reader types it in the Feedrion
 app (Settings ▸ Integrations ▸ Connected devices), which shows what is asking
 before approving; the next poll receives a session of its own.
+
+The code is shown on a FORM, not on a bare progress screen, while polling runs
+in the background from the moment it is shown. A progress screen can only be
+left by the frontend reacting to "done", and the reader typically leaves this
+tab for the Feedrion app: a phone that put Home Assistant in the background
+misses that event and the dialog then waits for ever, although the session
+already arrived. A submit button survives that; submitting before approving
+falls back to a progress screen, watched by a frontend that is in front.
 """
 
 from __future__ import annotations
 
 import asyncio
+import logging
 from collections.abc import Mapping
 from typing import Any
 
@@ -18,7 +27,7 @@ from homeassistant.core import callback
 from homeassistant.helpers import selector
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 
-from .api import FeedrionClient, FeedrionError, normalize_api_url
+from .api import FeedrionClient, FeedrionConnectionError, FeedrionError, normalize_api_url
 from .const import (
     CONF_ACCESS_TOKEN,
     CONF_API_URL,
@@ -36,6 +45,8 @@ from .const import (
     MAX_FEEDS,
     STOCK_PROVIDERS,
 )
+
+_LOGGER = logging.getLogger(__name__)
 
 PAIR_TIMEOUT = 600
 
@@ -89,13 +100,34 @@ class FeedrionConfigFlow(ConfigFlow, domain=DOMAIN):
         if self._start is None:
             try:
                 self._start = await client.start_pairing(self.hass.config.location_name or "Home Assistant")
-            except FeedrionError:
+            except FeedrionError as err:
+                _LOGGER.warning("Feedrion pairing could not start: %s", err)
                 return self.async_abort(reason="cannot_connect")
         if self._task is None:
             self._task = self.hass.async_create_task(self._wait(client))
+        return await self.async_step_code()
+
+    async def async_step_code(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """The code, and a button the reader presses once they approved it."""
+        assert self._start is not None and self._task is not None
+        if user_input is None:
+            return self.async_show_form(
+                step_id="code",
+                description_placeholders={
+                    "code": self._start["user_code"],
+                    "url": self._start["verification_url"],
+                },
+            )
+        if self._task.done():
+            return await (self.async_step_finish() if self._session else self.async_step_failed())
+        return await self.async_step_wait()
+
+    async def async_step_wait(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Submitted before the app approved: wait here, in front of the reader."""
+        assert self._start is not None and self._task is not None
         if not self._task.done():
             return self.async_show_progress(
-                step_id="pair",
+                step_id="wait",
                 progress_action="wait_for_code",
                 description_placeholders={
                     "code": self._start["user_code"],
@@ -106,6 +138,13 @@ class FeedrionConfigFlow(ConfigFlow, domain=DOMAIN):
         return self.async_show_progress_done(next_step_id="finish" if self._session else "failed")
 
     async def _wait(self, client: FeedrionClient) -> None:
+        try:
+            await self._poll_until_answered(client)
+        except Exception:  # a dying task would leave the reader waiting with no word
+            _LOGGER.exception("Feedrion pairing failed")
+            self._failure = "pairing_failed"
+
+    async def _poll_until_answered(self, client: FeedrionClient) -> None:
         assert self._start is not None
         interval = max(int(self._start.get("interval") or 3), 2)
         deadline = asyncio.get_running_loop().time() + min(int(self._start.get("expires_in") or PAIR_TIMEOUT), PAIR_TIMEOUT)
@@ -113,15 +152,25 @@ class FeedrionConfigFlow(ConfigFlow, domain=DOMAIN):
             await _pause(interval)
             try:
                 answer = await client.poll_pairing(self._start["device_code"])
-            except FeedrionError:
-                continue  # a blip: the code is still valid
-            status = answer.get("status")
+            except FeedrionConnectionError as err:
+                # Unreachable, 429 or 5xx: the code is still valid, try again.
+                _LOGGER.debug("Feedrion pairing poll failed, retrying: %s", err)
+                continue
+            except FeedrionError as err:
+                # Any other refusal will be the same on the next poll: waiting
+                # ten minutes in silence would only hide it.
+                _LOGGER.warning("Feedrion refused the pairing poll: %s", err)
+                self._failure = "pairing_failed"
+                return
+            status = answer.get("status") if isinstance(answer, dict) else None
             if status == "approved" and answer.get("refresh_token"):
+                _LOGGER.debug("Feedrion pairing approved")
                 self._session = answer
                 return
             if status in ("expired", "denied"):
                 self._failure = "expired"
                 return
+        _LOGGER.info("Feedrion pairing code expired before it was approved")
         self._failure = "expired"
 
     async def async_step_failed(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
