@@ -1553,9 +1553,9 @@ const ARTICLES_CSS = `
             -webkit-box-orient: vertical; overflow: hidden; }
   .meta { margin-top: 3px; font-size: 11.5px; color: var(--secondary-text-color); white-space: nowrap;
           overflow: hidden; text-overflow: ellipsis; }
-  .badge { display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 6px; font-size: 10.5px;
+  .badge { display: inline-block; margin-inline-end: 6px; padding: 0 6px; border-radius: 6px; font-size: 10.5px;
            font-weight: 700; background: #FFE898; color: #5C4612; vertical-align: 1px; }
-  .kw { display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 6px; font-size: 10.5px;
+  .kw { display: inline-block; margin-inline-end: 6px; padding: 0 6px; border-radius: 6px; font-size: 10.5px;
         font-weight: 700; background: rgba(10,76,255,.14); color: var(--primary-color); }
   .unseen { width: 8px; height: 8px; border-radius: 50%; background: #D63A2F; flex: none; }
 `;

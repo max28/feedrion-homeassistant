@@ -4,7 +4,7 @@ A [Home Assistant](https://www.home-assistant.io) integration for
 [Feedrion](https://feedrion.com): your feeds, your TV shows, your cities'
 weather, your currencies and your stocks, as entities, events and actions.
 
-![Feedrion cards on a Home Assistant dashboard: episodes to watch, upcoming episodes, weather, currencies and the unread counter](docs/images/cards-en.webp)
+![Feedrion cards on a Home Assistant dashboard: episodes to watch, upcoming episodes, weather, currencies, saved articles, keyword alerts and the unread counter](docs/images/cards-en.webp)
 
 **Requires Feedrion Premium.** A connected account that is not Premium shows a
 repair notice and its sensors go unavailable until it is.
