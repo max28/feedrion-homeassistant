@@ -113,6 +113,11 @@ class FeedrionClient:
             "GET", "/integrations/v1/homeassistant/tv/upcoming", params={"days": str(days)},
         )
 
+    async def alerts(self, limit: int = 20) -> list[dict[str, Any]]:
+        return await self._request(
+            "GET", "/integrations/v1/homeassistant/alerts", params={"limit": str(limit)},
+        )
+
     async def events(self, cursor: str | None, feeds: list[int]) -> dict[str, Any]:
         params: dict[str, str] = {}
         if cursor:

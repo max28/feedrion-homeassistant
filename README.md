@@ -13,7 +13,7 @@ repair notice and its sensors go unavailable until it is.
 
 | Entity | What it shows |
 |--------|---------------|
-| `sensor.feedrion_unread_articles`, `…_saved_articles`, `…_starred_articles`, `…_unseen_alerts` | Counters |
+| `sensor.feedrion_unread_articles`, `…_saved_articles`, `…_starred_articles`, `…_unseen_alerts` | Counters; Saved and Unseen alerts also carry their latest items (for the cards) |
 | `sensor.feedrion_<folder>_unread` | One per folder |
 | `sensor.feedrion_<feed>_unread` | One per feed you pick in the options (50 at most) |
 | `sensor.feedrion_latest_articles` | The newest unread articles (titles, links, images) in its attributes |
@@ -53,17 +53,20 @@ newest unread headlines as one text — ready for `tts.speak`:
 
 ## Cards
 
-The integration ships five dashboard cards drawn like the Feedrion phone
+The integration ships eight dashboard cards drawn like the Feedrion phone
 widgets. They are loaded automatically — nothing to add under Dashboards ▸
 Resources — and appear in the card picker as "Feedrion · …". They only read
 the entities above: a card never calls Feedrion.
 
 | Card | Shows |
 |------|-------|
-| `custom:feedrion-tv-card` | Episodes to watch (`mode: to_watch`) or upcoming (`mode: upcoming`): the show's background and poster behind each row, episodes left or air date, one show's episodes of the same day grouped |
-| `custom:feedrion-weather-card` | A `weather.feedrion_…` city on a sky that follows the weather, ↑ max ↓ min, the next days (or hours) |
+| `custom:feedrion-tv-card` | Episodes to watch: the show's background and poster behind each row, episodes left (`mode: upcoming` turns it into the next card) |
+| `custom:feedrion-upcoming-card` | Upcoming episodes: air date and time, one show's episodes of the same day grouped |
+| `custom:feedrion-weather-card` | A `weather.feedrion_…` city on a sky that follows the weather, ↑ max ↓ min, the next days (or hours); without `entity` (or if it no longer exists), your first city |
 | `custom:feedrion-markets-card` | Currency pairs and My stocks, price and change; `rotate: true` turns one at a time like the phone row |
-| `custom:feedrion-articles-card` | The newest unread articles, with images; anti-spoil titles stay masked |
+| `custom:feedrion-articles-card` | The newest unread articles, with images; anti-spoil titles stay masked (`source: saved` or `alerts` for the next two) |
+| `custom:feedrion-saved-card` | Your Saved articles (read later) |
+| `custom:feedrion-alerts-card` | The articles that fired a keyword alert, the keyword beside each, a dot on the unseen ones |
 | `custom:feedrion-unread-card` | One counter (unread by default, any Feedrion sensor with `entity`) |
 
 ```yaml
@@ -76,7 +79,7 @@ show_watched_button: false  # two taps mark the episode watched (reaches Trakt /
 
 ```yaml
 type: custom:feedrion-weather-card
-entity: weather.feedrion_orleans
+entity: weather.feedrion_orleans   # optional: your own city's entity id
 forecast: daily         # hourly or none
 forecast_items: 5
 ```

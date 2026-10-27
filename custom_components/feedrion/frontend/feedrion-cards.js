@@ -1,13 +1,16 @@
 /*
  * Feedrion cards for Home Assistant dashboards.
  *
- * Five cards drawn like the Feedrion phone widgets, reading only what the
+ * Cards drawn like the Feedrion phone widgets, reading only what the
  * integration's entities already hold — a card never calls Feedrion itself:
  *
- *   custom:feedrion-tv-card       "To watch" / "Upcoming" (TV shows extension)
+ *   custom:feedrion-tv-card       "To watch" (or "Upcoming", mode: upcoming)
+ *   custom:feedrion-upcoming-card "Upcoming" episodes (TV shows extension)
  *   custom:feedrion-weather-card  a city of the Weather extension, sky included
  *   custom:feedrion-markets-card  currency pairs and "My stocks"
  *   custom:feedrion-articles-card the newest unread articles
+ *   custom:feedrion-saved-card    Saved (read later)
+ *   custom:feedrion-alerts-card   the articles that fired a keyword alert
  *   custom:feedrion-unread-card   one counter
  *
  * Served by the integration itself (no resource to add by hand). Every piece
@@ -48,6 +51,11 @@ const STRINGS = {
     not_found: "Entity not found: {e}",
     max: "max",
     min: "min",
+    saved: "Saved",
+    saved_empty: "Nothing saved",
+    alerts: "Alerts",
+    alerts_empty: "No alert yet",
+    no_city: "No city in the Weather extension",
   },
   fr: {
     to_watch: "Épisodes à voir",
@@ -75,6 +83,11 @@ const STRINGS = {
     not_found: "Entité introuvable : {e}",
     max: "max",
     min: "min",
+    saved: "Sauvés",
+    saved_empty: "Rien de sauvé",
+    alerts: "Alertes",
+    alerts_empty: "Aucune alerte pour l'instant",
+    no_city: "Aucune ville dans l'extension Météo",
   },
   es: {
     to_watch: "Episodios por ver",
@@ -102,6 +115,11 @@ const STRINGS = {
     not_found: "Entidad no encontrada: {e}",
     max: "máx",
     min: "mín",
+    saved: "Guardados",
+    saved_empty: "Nada guardado",
+    alerts: "Alertas",
+    alerts_empty: "Aún no hay alertas",
+    no_city: "Ninguna ciudad en la extensión Tiempo",
   },
   de: {
     to_watch: "Folgen zum Ansehen",
@@ -129,6 +147,11 @@ const STRINGS = {
     not_found: "Entität nicht gefunden: {e}",
     max: "max",
     min: "min",
+    saved: "Gespeichert",
+    saved_empty: "Nichts gespeichert",
+    alerts: "Alarme",
+    alerts_empty: "Noch keine Alarme",
+    no_city: "Keine Stadt in der Erweiterung Wetter",
   },
   pt: {
     to_watch: "Episódios para ver",
@@ -156,6 +179,11 @@ const STRINGS = {
     not_found: "Entidade não encontrada: {e}",
     max: "máx",
     min: "mín",
+    saved: "Salvos",
+    saved_empty: "Nada salvo",
+    alerts: "Alertas",
+    alerts_empty: "Nenhum alerta ainda",
+    no_city: "Nenhuma cidade na extensão Tempo",
   },
   ru: {
     to_watch: "Серии к просмотру",
@@ -183,6 +211,11 @@ const STRINGS = {
     not_found: "Объект не найден: {e}",
     max: "макс",
     min: "мин",
+    saved: "Сохранённые",
+    saved_empty: "Ничего не сохранено",
+    alerts: "Оповещения",
+    alerts_empty: "Оповещений пока нет",
+    no_city: "В расширении «Погода» нет городов",
   },
   ja: {
     to_watch: "未視聴のエピソード",
@@ -210,6 +243,11 @@ const STRINGS = {
     not_found: "エンティティが見つかりません：{e}",
     max: "最高",
     min: "最低",
+    saved: "保存済み",
+    saved_empty: "保存した記事はありません",
+    alerts: "アラート",
+    alerts_empty: "アラートはまだありません",
+    no_city: "天気拡張機能に都市がありません",
   },
   zh: {
     to_watch: "待看剧集",
@@ -237,6 +275,11 @@ const STRINGS = {
     not_found: "未找到实体：{e}",
     max: "最高",
     min: "最低",
+    saved: "已保存",
+    saved_empty: "没有保存的内容",
+    alerts: "提醒",
+    alerts_empty: "暂无提醒",
+    no_city: "天气扩展中没有城市",
   },
   hi: {
     to_watch: "देखने के लिए एपिसोड",
@@ -264,6 +307,11 @@ const STRINGS = {
     not_found: "एंटिटी नहीं मिली: {e}",
     max: "अधिकतम",
     min: "न्यूनतम",
+    saved: "सहेजे गए",
+    saved_empty: "कुछ सहेजा नहीं गया",
+    alerts: "अलर्ट",
+    alerts_empty: "अभी कोई अलर्ट नहीं",
+    no_city: "मौसम एक्सटेंशन में कोई शहर नहीं",
   },
   bn: {
     to_watch: "দেখার মতো পর্ব",
@@ -291,6 +339,11 @@ const STRINGS = {
     not_found: "এন্টিটি পাওয়া যায়নি: {e}",
     max: "সর্বোচ্চ",
     min: "সর্বনিম্ন",
+    saved: "সংরক্ষিত",
+    saved_empty: "কিছু সংরক্ষিত নেই",
+    alerts: "সতর্কতা",
+    alerts_empty: "এখনো কোনো সতর্কতা নেই",
+    no_city: "আবহাওয়া এক্সটেনশনে কোনো শহর নেই",
   },
   id: {
     to_watch: "Episode untuk ditonton",
@@ -318,6 +371,11 @@ const STRINGS = {
     not_found: "Entitas tidak ditemukan: {e}",
     max: "maks",
     min: "min",
+    saved: "Disimpan",
+    saved_empty: "Belum ada yang disimpan",
+    alerts: "Peringatan",
+    alerts_empty: "Belum ada peringatan",
+    no_city: "Tidak ada kota di ekstensi Cuaca",
   },
   ar: {
     to_watch: "حلقات للمشاهدة",
@@ -345,6 +403,11 @@ const STRINGS = {
     not_found: "الكيان غير موجود: {e}",
     max: "الأعلى",
     min: "الأدنى",
+    saved: "المحفوظة",
+    saved_empty: "لا شيء محفوظ",
+    alerts: "التنبيهات",
+    alerts_empty: "لا توجد تنبيهات بعد",
+    no_city: "لا توجد مدينة في إضافة الطقس",
   },
   ur: {
     to_watch: "دیکھنے کے لیے اقساط",
@@ -372,6 +435,11 @@ const STRINGS = {
     not_found: "اینٹٹی نہیں ملی: {e}",
     max: "زیادہ",
     min: "کم",
+    saved: "محفوظ",
+    saved_empty: "کچھ محفوظ نہیں",
+    alerts: "الرٹس",
+    alerts_empty: "ابھی کوئی الرٹ نہیں",
+    no_city: "موسم ایکسٹینشن میں کوئی شہر نہیں",
   },
   nl: {
     to_watch: "Te kijken afleveringen",
@@ -399,6 +467,11 @@ const STRINGS = {
     not_found: "Entiteit niet gevonden: {e}",
     max: "max",
     min: "min",
+    saved: "Bewaard",
+    saved_empty: "Niets bewaard",
+    alerts: "Meldingen",
+    alerts_empty: "Nog geen meldingen",
+    no_city: "Geen stad in de extensie Weer",
   },
   it: {
     to_watch: "Episodi da vedere",
@@ -426,6 +499,11 @@ const STRINGS = {
     not_found: "Entità non trovata: {e}",
     max: "max",
     min: "min",
+    saved: "Salvati",
+    saved_empty: "Niente di salvato",
+    alerts: "Avvisi",
+    alerts_empty: "Ancora nessun avviso",
+    no_city: "Nessuna città nell'estensione Meteo",
   },
   ko: {
     to_watch: "볼 에피소드",
@@ -453,6 +531,11 @@ const STRINGS = {
     not_found: "엔티티를 찾을 수 없음: {e}",
     max: "최고",
     min: "최저",
+    saved: "저장됨",
+    saved_empty: "저장한 항목이 없습니다",
+    alerts: "알림",
+    alerts_empty: "아직 알림이 없습니다",
+    no_city: "날씨 확장 기능에 도시가 없습니다",
   },
   pl: {
     to_watch: "Odcinki do obejrzenia",
@@ -480,6 +563,11 @@ const STRINGS = {
     not_found: "Nie znaleziono encji: {e}",
     max: "maks.",
     min: "min.",
+    saved: "Zapisane",
+    saved_empty: "Nic nie zapisano",
+    alerts: "Alerty",
+    alerts_empty: "Brak alertów",
+    no_city: "Brak miasta w rozszerzeniu Pogoda",
   },
   vi: {
     to_watch: "Tập cần xem",
@@ -507,6 +595,11 @@ const STRINGS = {
     not_found: "Không tìm thấy thực thể: {e}",
     max: "cao",
     min: "thấp",
+    saved: "Đã lưu",
+    saved_empty: "Chưa lưu gì",
+    alerts: "Cảnh báo",
+    alerts_empty: "Chưa có cảnh báo",
+    no_city: "Không có thành phố nào trong tiện ích Thời tiết",
   },
   uk: {
     to_watch: "Серії до перегляду",
@@ -534,6 +627,11 @@ const STRINGS = {
     not_found: "Об'єкт не знайдено: {e}",
     max: "макс",
     min: "мін",
+    saved: "Збережені",
+    saved_empty: "Нічого не збережено",
+    alerts: "Сповіщення",
+    alerts_empty: "Сповіщень поки немає",
+    no_city: "У розширенні «Погода» немає міст",
   },
   tr: {
     to_watch: "İzlenecek bölümler",
@@ -561,6 +659,11 @@ const STRINGS = {
     not_found: "Varlık bulunamadı: {e}",
     max: "en yüksek",
     min: "en düşük",
+    saved: "Kaydedilenler",
+    saved_empty: "Kaydedilen bir şey yok",
+    alerts: "Uyarılar",
+    alerts_empty: "Henüz uyarı yok",
+    no_city: "Hava durumu uzantısında şehir yok",
   },
 };
 
@@ -774,10 +877,28 @@ function timeAgo(hass, iso, now) {
  */
 function findEntity(hass, translationKey, fallbackId) {
   const entities = (hass && hass.entities) || {};
-  for (const entry of Object.values(entities)) {
-    if (entry.platform === "feedrion" && entry.translation_key === translationKey) return entry.entity_id;
+  for (const [id, entry] of Object.entries(entities)) {
+    if (entry.platform === "feedrion" && entry.translation_key === translationKey) return entry.entity_id || id;
   }
   return fallbackId;
+}
+
+/**
+ * An entity's own name, without the "Feedrion" device prefix Home Assistant
+ * puts in front of it ("Feedrion EUR/USD" → "EUR/USD"). A name the user typed
+ * in the entity settings wins.
+ */
+function entityLabel(hass, id) {
+  const st = hass && hass.states ? hass.states[id] : undefined;
+  const entry = hass && hass.entities ? hass.entities[id] : undefined;
+  if (entry && entry.name) return entry.name;
+  const full = (st && st.attributes && st.attributes.friendly_name) || id;
+  const device = entry && entry.device_id && hass.devices ? hass.devices[entry.device_id] : undefined;
+  const prefixes = [device && device.name_by_user, device && device.name, "Feedrion"].filter(Boolean);
+  for (const prefix of prefixes) {
+    if (full.startsWith(`${prefix} `) && full.length > prefix.length + 1) return full.slice(prefix.length + 1);
+  }
+  return full;
 }
 
 function feedrionEntities(hass, predicate) {
@@ -1087,6 +1208,22 @@ class FeedrionTvCard extends FeedrionBaseCard {
   }
 }
 
+/** "Upcoming" on its own, so it has its own entry in the card picker. */
+class FeedrionUpcomingCard extends FeedrionTvCard {
+  static getStubConfig() {
+    return {};
+  }
+
+  static getConfigForm() {
+    const form = FeedrionTvCard.getConfigForm();
+    return { schema: form.schema.filter((f) => !["mode", "show_set_aside", "show_watched_button"].includes(f.name)) };
+  }
+
+  setConfig(config) {
+    super.setConfig({ ...config, mode: "upcoming" });
+  }
+}
+
 // ── Weather ──────────────────────────────────────────────────────────────────
 
 const WEATHER_CSS = `
@@ -1112,13 +1249,13 @@ const WEATHER_CSS = `
 class FeedrionWeatherCard extends FeedrionBaseCard {
   static getStubConfig(hass) {
     const ids = feedrionEntities(hass, (id) => id.startsWith("weather."));
-    return { entity: ids[0] || "weather.feedrion" };
+    return ids[0] ? { entity: ids[0] } : {};
   }
 
   static getConfigForm() {
     return {
       schema: [
-        { name: "entity", required: true, selector: { entity: { filter: { integration: "feedrion", domain: "weather" } } } },
+        { name: "entity", selector: { entity: { filter: { integration: "feedrion", domain: "weather" } } } },
         { name: "forecast", selector: { select: { mode: "dropdown", options: [
           { value: "daily", label: "Days" },
           { value: "hourly", label: "Hours" },
@@ -1137,9 +1274,18 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
   }
 
   setConfig(config) {
-    if (!config || !config.entity) throw new Error("entity is required (a weather.feedrion_… entity)");
     super.setConfig({ forecast: "daily", ...config });
     this._resubscribe();
+  }
+
+  /** The configured city, or — when none is given, or it no longer exists
+   * (renamed, removed, an example copied from the README) — the first
+   * Feedrion city: a card never stays on "not found" while a city is there. */
+  get _entity() {
+    const wanted = this._config.entity;
+    if (wanted && this._state(wanted)) return wanted;
+    const ids = feedrionEntities(this._hass, (id) => id.startsWith("weather."));
+    return ids[0] || wanted || null;
   }
 
   set hass(hass) {
@@ -1160,7 +1306,7 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
   }
 
   _watched() {
-    return [this._config.entity, "sun.sun"];
+    return [this._entity, "sun.sun"];
   }
 
   _css() {
@@ -1178,7 +1324,8 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
 
   _resubscribe() {
     const type = this._config.forecast === "hourly" ? "hourly" : "daily";
-    const wanted = this._config.forecast === "none" ? null : `${this._config.entity}|${type}`;
+    const entity = this._entity;
+    const wanted = this._config.forecast === "none" || !entity ? null : `${entity}|${type}`;
     if (!this.isConnected || !this._hass || !this._hass.connection || wanted === this._subscribedTo) return;
     this._unsubscribe();
     this._forecast = null;
@@ -1189,7 +1336,7 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
         this._forecast = { type, items: (msg && msg.forecast) || [] };
         this._render();
       },
-      { type: "weather/subscribe_forecast", forecast_type: type, entity_id: this._config.entity },
+      { type: "weather/subscribe_forecast", forecast_type: type, entity_id: entity },
     ).catch(() => {
       this._subscribedTo = null;
       return null;
@@ -1203,11 +1350,12 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
   }
 
   _build(card) {
-    const st = this._state(this._config.entity);
+    const id = this._entity;
+    const st = this._state(id);
     if (!st) {
       card.style.color = "var(--primary-text-color)";
       card.style.padding = "12px";
-      card.append(h("div", { class: "empty" }, t(this._hass, "not_found", { e: this._config.entity })));
+      card.append(h("div", { class: "empty" }, id ? t(this._hass, "not_found", { e: id }) : t(this._hass, "no_city")));
       return;
     }
     const attrs = st.attributes || {};
@@ -1216,7 +1364,7 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
     const box = h("div", {
       class: "sky clickable",
       style: `background: linear-gradient(180deg, ${sky[0]} 0%, ${sky[1]} 50%, ${sky[2]} 100%)`,
-      onclick: () => moreInfo(this, this._config.entity),
+      onclick: () => moreInfo(this, id),
     });
     const daily = this._forecast && this._forecast.type === "daily" ? this._forecast.items : [];
     const today = daily[0];
@@ -1224,7 +1372,7 @@ class FeedrionWeatherCard extends FeedrionBaseCard {
       ? this._hass.localize(`component.weather.entity_component._.state.${st.state}`) || st.state
       : st.state;
     box.append(
-      h("div", { class: "top" }, h("div", { class: "city" }, attrs.friendly_name || this._config.entity)),
+      h("div", { class: "top" }, h("div", { class: "city" }, entityLabel(this._hass, id))),
       h("div", { class: "now" },
         h("ha-icon", { icon: weatherIcon(st.state, night) }),
         h("div", {},
@@ -1360,7 +1508,7 @@ class FeedrionMarketsCard extends FeedrionBaseCard {
     const unit = a.unit_of_measurement ? ` ${a.unit_of_measurement}` : "";
     return h("div", { class: "item clickable", onclick: () => moreInfo(this, id) },
       h("div", { class: "names" },
-        h("div", { class: "name" }, a.friendly_name || id),
+        h("div", { class: "name" }, entityLabel(this._hass, id)),
         sub ? h("div", { class: "sub" }, sub) : null),
       h("div", { class: "price" },
         hasPrice ? `${formatNumber(this._hass, value)}${unit}` : h("span", { class: "sub" }, t(this._hass, "no_quote")),
@@ -1407,7 +1555,22 @@ const ARTICLES_CSS = `
           overflow: hidden; text-overflow: ellipsis; }
   .badge { display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 6px; font-size: 10.5px;
            font-weight: 700; background: #FFE898; color: #5C4612; vertical-align: 1px; }
+  .kw { display: inline-block; margin-right: 6px; padding: 0 6px; border-radius: 6px; font-size: 10.5px;
+        font-weight: 700; background: rgba(10,76,255,.14); color: var(--primary-color); }
+  .unseen { width: 8px; height: 8px; border-radius: 50%; background: #D63A2F; flex: none; }
 `;
+
+/** Which list an articles card draws: the sensor holding it, the attribute,
+ * the title and the empty text. */
+const ARTICLE_SOURCES = {
+  unread: { key: "latest_articles", fallback: "sensor.feedrion_latest_articles", attr: "articles",
+            title: "articles", empty: "articles_empty",
+            countKey: "unread", countFallback: "sensor.feedrion_unread_articles" },
+  saved: { key: "saved", fallback: "sensor.feedrion_saved_articles", attr: "articles",
+           title: "saved", empty: "saved_empty" },
+  alerts: { key: "alerts", fallback: "sensor.feedrion_unseen_alerts", attr: "alerts",
+            title: "alerts", empty: "alerts_empty" },
+};
 
 class FeedrionArticlesCard extends FeedrionBaseCard {
   static getStubConfig() {
@@ -1417,6 +1580,11 @@ class FeedrionArticlesCard extends FeedrionBaseCard {
   static getConfigForm() {
     return {
       schema: [
+        { name: "source", selector: { select: { mode: "dropdown", options: [
+          { value: "unread", label: "Unread" },
+          { value: "saved", label: "Saved" },
+          { value: "alerts", label: "Alerts" },
+        ] } } },
         { name: "title", selector: { text: {} } },
         { name: "max_items", selector: { number: { min: 1, max: 50, mode: "box" } } },
         { name: "show_images", selector: { boolean: {} } },
@@ -1425,19 +1593,34 @@ class FeedrionArticlesCard extends FeedrionBaseCard {
   }
 
   setConfig(config) {
-    super.setConfig({ max_items: 5, show_images: true, ...config });
+    if (config && config.source && !ARTICLE_SOURCES[config.source]) {
+      throw new Error("source must be unread, saved or alerts");
+    }
+    super.setConfig({ source: this._defaultSource(), max_items: 5, show_images: true, ...config });
+  }
+
+  _defaultSource() {
+    return "unread";
+  }
+
+  get _source() {
+    return ARTICLE_SOURCES[this._config.source] || ARTICLE_SOURCES.unread;
   }
 
   get _entity() {
-    return this._config.entity || findEntity(this._hass, "latest_articles", "sensor.feedrion_latest_articles");
+    const src = this._source;
+    return this._config.entity || findEntity(this._hass, src.key, src.fallback);
   }
 
-  get _unread() {
-    return findEntity(this._hass, "unread", "sensor.feedrion_unread_articles");
+  /** The sensor whose state is the count in the title: the list's own
+   * sensor, except "unread", whose list is the latest articles. */
+  get _countEntity() {
+    const src = this._source;
+    return src.countKey ? findEntity(this._hass, src.countKey, src.countFallback) : this._entity;
   }
 
   _watched() {
-    return [this._entity, this._unread];
+    return [this._entity, this._countEntity];
   }
 
   _css() {
@@ -1445,18 +1628,19 @@ class FeedrionArticlesCard extends FeedrionBaseCard {
   }
 
   _build(card) {
+    const src = this._source;
     const st = this._state(this._entity);
-    const unread = this._state(this._unread);
-    const count = unread && Number.isFinite(Number(unread.state)) ? ` (${unread.state})` : "";
-    card.append(this._head(this._config.title || `${t(this._hass, "articles")}${count}`));
+    const counter = this._state(this._countEntity);
+    const count = counter && Number.isFinite(Number(counter.state)) ? ` (${counter.state})` : "";
+    card.append(this._head(this._config.title || `${t(this._hass, src.title)}${count}`));
     if (!st) {
       card.append(h("div", { class: "empty" }, t(this._hass, "not_found", { e: this._entity })));
       return;
     }
-    const list = (Array.isArray(st.attributes.articles) ? st.attributes.articles : [])
-      .slice(0, Math.max(1, Number(this._config.max_items) || 5));
+    const raw = st.attributes ? st.attributes[src.attr] : null;
+    const list = (Array.isArray(raw) ? raw : []).slice(0, Math.max(1, Number(this._config.max_items) || 5));
     if (!list.length) {
-      card.append(h("div", { class: "empty" }, t(this._hass, "articles_empty")));
+      card.append(h("div", { class: "empty" }, t(this._hass, src.empty)));
       return;
     }
     card.append(h("div", { class: "list" }, list.map((a) => {
@@ -1465,13 +1649,46 @@ class FeedrionArticlesCard extends FeedrionBaseCard {
         this._config.show_images ? img(a.image_url, "thumb") : null,
         h("div", { class: "body" },
           // A title masked by anti-spoil arrives masked; it stays masked here.
-          h("div", { class: "atitle" }, a.masked ? h("span", { class: "badge" }, t(this._hass, "masked")) : null, a.title || ""),
-          h("div", { class: "meta" }, [a.feed, timeAgo(this._hass, a.published_at)].filter(Boolean).join(" · "))));
+          h("div", { class: "atitle" },
+            a.keyword ? h("span", { class: "kw" }, a.keyword) : null,
+            a.masked ? h("span", { class: "badge" }, t(this._hass, "masked")) : null, a.title || ""),
+          h("div", { class: "meta" }, [a.feed, timeAgo(this._hass, a.matched_at || a.published_at)].filter(Boolean).join(" · "))),
+        a.keyword && a.seen === false ? h("span", { class: "unseen" }) : null);
     })));
   }
 
   getCardSize() {
     return 1 + Math.min(Number(this._config.max_items) || 5, 8);
+  }
+}
+
+/** Saved (read later), with its own entry in the card picker. */
+class FeedrionSavedCard extends FeedrionArticlesCard {
+  _defaultSource() {
+    return "saved";
+  }
+
+  static getConfigForm() {
+    return { schema: FeedrionArticlesCard.getConfigForm().schema.filter((f) => f.name !== "source") };
+  }
+
+  setConfig(config) {
+    super.setConfig({ ...config, source: "saved" });
+  }
+}
+
+/** The articles that fired a keyword alert, the keyword beside each. */
+class FeedrionAlertsCard extends FeedrionArticlesCard {
+  _defaultSource() {
+    return "alerts";
+  }
+
+  static getConfigForm() {
+    return { schema: FeedrionArticlesCard.getConfigForm().schema.filter((f) => f.name !== "source") };
+  }
+
+  setConfig(config) {
+    super.setConfig({ ...config, source: "alerts" });
   }
 }
 
@@ -1535,10 +1752,13 @@ class FeedrionUnreadCard extends FeedrionBaseCard {
 // ── Registration ─────────────────────────────────────────────────────────────
 
 const CARDS = [
-  ["feedrion-tv-card", FeedrionTvCard, "Feedrion · TV shows", "Episodes to watch or upcoming, like the phone widget."],
+  ["feedrion-tv-card", FeedrionTvCard, "Feedrion · Episodes to watch", "The next episode of each show, like the phone widget."],
+  ["feedrion-upcoming-card", FeedrionUpcomingCard, "Feedrion · Upcoming episodes", "What airs next, like the phone widget."],
   ["feedrion-weather-card", FeedrionWeatherCard, "Feedrion · Weather", "A city with its sky, like the phone widget."],
   ["feedrion-markets-card", FeedrionMarketsCard, "Feedrion · Stocks & currencies", "Currency pairs and My stocks."],
   ["feedrion-articles-card", FeedrionArticlesCard, "Feedrion · Articles", "The newest unread articles."],
+  ["feedrion-saved-card", FeedrionSavedCard, "Feedrion · Saved", "Your articles saved for later."],
+  ["feedrion-alerts-card", FeedrionAlertsCard, "Feedrion · Alerts", "Articles that fired a keyword alert."],
   ["feedrion-unread-card", FeedrionUnreadCard, "Feedrion · Counter", "One Feedrion counter."],
 ];
 
@@ -1556,7 +1776,7 @@ if (typeof customElements !== "undefined") {
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     STRINGS, t, safeUrl, episodeCode, airDate, groupUpcoming, airLabel, episodeLine, weatherSky,
-    weatherIcon, changeLabel, deg, CARDS: CARDS.map((c) => c[0]),
+    weatherIcon, changeLabel, deg, entityLabel, CARDS: CARDS.map((c) => c[0]),
   };
 }
 })();

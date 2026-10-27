@@ -37,7 +37,7 @@ async def test_without_a_frontend_nothing_is_registered(hass: HomeAssistant) -> 
 def test_the_readme_documents_every_card() -> None:
     source = CARDS_FILE.read_text(encoding="utf-8")
     tags = re.findall(r'\["(feedrion-[a-z-]+-card)"', source)
-    assert len(tags) == 5
+    assert len(tags) == 8
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     for tag in tags:
         assert f"custom:{tag}" in readme, tag

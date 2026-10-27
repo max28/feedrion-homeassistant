@@ -77,6 +77,9 @@ def mock_api(aioclient_mock: AiohttpClientMocker, *, state: dict | None = None, 
     aioclient_mock.get(f"{HA}/articles", json=[ARTICLE])
     aioclient_mock.get(f"{HA}/tv/to-watch", json=[EPISODE])
     aioclient_mock.get(f"{HA}/tv/upcoming", json=[state_payload()["tv"]["next_upcoming"]])
+    aioclient_mock.get(f"{HA}/alerts", json=[{"article": {**ARTICLE, "id": 102, "title": "Rust 2.0"},
+                                              "keyword": "Rust", "seen": False,
+                                              "matched_at": "2026-10-25T09:30:00Z"}])
     aioclient_mock.get(f"{HA}/events", json={"cursor": "a1|m1", "events": []})
     aioclient_mock.get(f"{HA}/catalog", json={"folders": state_payload()["rss"]["folders"],
                                               "feeds": state_payload()["rss"]["feeds"]})
