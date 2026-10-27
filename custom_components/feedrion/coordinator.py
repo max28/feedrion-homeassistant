@@ -40,6 +40,7 @@ _LOGGER = logging.getLogger(__name__)
 
 UPCOMING_DAYS = 31
 SAVED_ITEMS = 50
+ALERT_ITEMS = 20
 
 
 def selected_feeds(entry: ConfigEntry) -> list[int]:
@@ -66,6 +67,7 @@ class FeedrionData:
     to_watch: list[dict[str, Any]] = field(default_factory=list)
     upcoming: list[dict[str, Any]] = field(default_factory=list)
     saved: list[dict[str, Any]] = field(default_factory=list)
+    alerts: list[dict[str, Any]] = field(default_factory=list)
 
 
 class FeedrionCoordinator(DataUpdateCoordinator[FeedrionData]):
@@ -88,6 +90,7 @@ class FeedrionCoordinator(DataUpdateCoordinator[FeedrionData]):
             tv = state.get("tv") or {}
             to_watch = await self.client.to_watch() if tv.get("enabled") else []
             upcoming = await self.client.upcoming(UPCOMING_DAYS) if tv.get("enabled") else []
+            alerts = await self._alerts()
         except FeedrionAuthError as err:
             raise ConfigEntryAuthFailed("The Feedrion session was revoked") from err
         except FeedrionPremiumRequired as err:
@@ -101,7 +104,19 @@ class FeedrionCoordinator(DataUpdateCoordinator[FeedrionData]):
             self.premium_missing = False
             _premium_issue(self.hass, entry, False, None)
         return FeedrionData(state=state, articles=articles, to_watch=to_watch, upcoming=upcoming,
-                            saved=saved)
+                            saved=saved, alerts=alerts)
+
+    async def _alerts(self) -> list[dict[str, Any]]:
+        # An API from before the alerts list answers 404: the alerts card is
+        # then empty, the rest of the integration carries on.
+        try:
+            return await self.client.alerts(ALERT_ITEMS)
+        except (FeedrionAuthError, FeedrionPremiumRequired):
+            raise
+        except FeedrionError as err:
+            if err.status == 404:
+                return []
+            raise
 
 
 class FeedrionEvents:

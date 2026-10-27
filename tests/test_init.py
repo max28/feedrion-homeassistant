@@ -39,6 +39,12 @@ async def test_entities(hass: HomeAssistant, entry: MockConfigEntry, aioclient_m
     ai = hass.states.get("sensor.feedrion_ai_articles_this_month")
     assert ai.state == "120" and ai.attributes["quota"] == 1200
     assert hass.states.get("sensor.feedrion_euro_dollar").state == "1.08"
+    saved = hass.states.get("sensor.feedrion_saved_articles")
+    assert saved.state == "3" and saved.attributes["articles"][0]["title"] == "Hello"
+    alerts = hass.states.get("sensor.feedrion_unseen_alerts")
+    assert alerts.state == "1"
+    first = alerts.attributes["alerts"][0]
+    assert {"title": "Rust 2.0", "keyword": "Rust", "seen": False}.items() <= first.items()
 
     weather = hass.states.get("weather.feedrion_orleans")
     assert weather.state == "partlycloudy"
@@ -51,6 +57,17 @@ async def test_entities(hass: HomeAssistant, entry: MockConfigEntry, aioclient_m
     # My stocks are never quoted without the reader's own key.
     assert hass.states.get("sensor.feedrion_apple") is None
     assert not any("twelvedata" in str(call[1]) for call in aioclient_mock.mock_calls)
+
+
+async def test_an_api_without_the_alerts_list_still_loads(
+    hass: HomeAssistant, entry: MockConfigEntry, aioclient_mock: AiohttpClientMocker,
+) -> None:
+    mock_api(aioclient_mock)
+    aioclient_mock._mocks = [m for m in aioclient_mock._mocks if not str(m._url).endswith("/alerts")]
+    aioclient_mock.get(f"{HA}/alerts", status=404, json={"detail": "Not Found"})
+    await _setup(hass, entry)
+    assert entry.state is ConfigEntryState.LOADED
+    assert hass.states.get("sensor.feedrion_unseen_alerts").attributes["alerts"] == []
 
 
 async def test_only_selected_feeds_are_asked_for(
@@ -90,6 +107,7 @@ async def test_a_rotated_refresh_token_is_stored(
     aioclient_mock.get(f"{HA}/articles", json=[ARTICLE])
     aioclient_mock.get(f"{HA}/tv/to-watch", json=[])
     aioclient_mock.get(f"{HA}/tv/upcoming", json=[])
+    aioclient_mock.get(f"{HA}/alerts", json=[])
     aioclient_mock.get(f"{HA}/events", json={"cursor": "a1|m1", "events": []})
     await _setup(hass, entry)
     assert entry.state is ConfigEntryState.LOADED

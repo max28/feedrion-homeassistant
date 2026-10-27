@@ -76,3 +76,29 @@ test("a change is signed, a missing one is nothing", () => {
   assert.equal(cards.deg(12.6), "13°");
   assert.equal(cards.deg(undefined), "–");
 });
+
+test("an entity's name loses the Feedrion device prefix", () => {
+  const hass = {
+    states: {
+      "sensor.feedrion_euro_dollar": { attributes: { friendly_name: "Feedrion Euro → Dollar" } },
+      "sensor.feedrion_apple": { attributes: { friendly_name: "Maison Apple" } },
+      "weather.feedrion_orleans": { attributes: { friendly_name: "Feedrion Orléans" } },
+      "sensor.feedrion_renamed": { attributes: { friendly_name: "Feedrion X" } },
+    },
+    entities: {
+      "sensor.feedrion_apple": { platform: "feedrion", device_id: "d1" },
+      "sensor.feedrion_renamed": { platform: "feedrion", device_id: "d1", name: "Mon dollar" },
+    },
+    devices: { d1: { name: "Feedrion", name_by_user: "Maison" } },
+  };
+  assert.equal(cards.entityLabel(hass, "sensor.feedrion_euro_dollar"), "Euro → Dollar");
+  assert.equal(cards.entityLabel(hass, "sensor.feedrion_apple"), "Apple");
+  assert.equal(cards.entityLabel(hass, "weather.feedrion_orleans"), "Orléans");
+  assert.equal(cards.entityLabel(hass, "sensor.feedrion_renamed"), "Mon dollar");
+});
+
+test("upcoming, saved and alerts have their own cards", () => {
+  for (const tag of ["feedrion-upcoming-card", "feedrion-saved-card", "feedrion-alerts-card"]) {
+    assert.ok(cards.CARDS.includes(tag), tag);
+  }
+});

@@ -34,6 +34,11 @@ def _article(a: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _alert(m: dict[str, Any]) -> dict[str, Any]:
+    return {**_article(m.get("article") or {}), "keyword": m.get("keyword"),
+            "seen": bool(m.get("seen")), "matched_at": m.get("matched_at")}
+
+
 def _episode(e: dict[str, Any] | None) -> dict[str, Any] | None:
     if not e:
         return None
@@ -58,7 +63,7 @@ class _ValueSensor(FeedrionEntity, SensorEntity):
 
     # The lists the dashboard cards draw: current state only, never one copy
     # per update in the recorder's history.
-    _unrecorded_attributes = frozenset({"articles", "next", "upcoming"})
+    _unrecorded_attributes = frozenset({"articles", "alerts", "next", "upcoming"})
 
     def __init__(
         self, coordinator: FeedrionCoordinator, entry_id: str, key: str, value: Callable[[dict], Any],
@@ -83,7 +88,7 @@ class _ValueSensor(FeedrionEntity, SensorEntity):
     def _data(self) -> dict:
         data = self.coordinator.data
         return {"state": data.state, "articles": data.articles, "to_watch": data.to_watch,
-                "upcoming": data.upcoming} if data else {}
+                "upcoming": data.upcoming, "saved": data.saved, "alerts": data.alerts} if data else {}
 
     def _eval(self, fn: Callable[[dict], Any]) -> Any:
         try:
@@ -126,11 +131,13 @@ def _fixed_sensors(c: FeedrionCoordinator, eid: str) -> list[SensorEntity]:
         _ValueSensor(c, eid, "unread", lambda d: rss(d)["unread"], translation_key="unread",
                      icon="mdi:rss", unit="articles"),
         _ValueSensor(c, eid, "saved", lambda d: rss(d)["saved"], translation_key="saved",
-                     icon="mdi:bookmark", unit="articles"),
+                     icon="mdi:bookmark", unit="articles",
+                     attrs=lambda d: {"articles": [_article(a) for a in d["saved"][:MAX_ARTICLE_ATTRS]]}),
         _ValueSensor(c, eid, "starred", lambda d: rss(d)["starred"], translation_key="starred",
                      icon="mdi:star", unit="articles"),
         _ValueSensor(c, eid, "alerts", lambda d: rss(d)["alerts_unseen"], translation_key="alerts",
-                     icon="mdi:bell-ring", unit="articles"),
+                     icon="mdi:bell-ring", unit="articles",
+                     attrs=lambda d: {"alerts": [_alert(m) for m in d["alerts"][:MAX_ARTICLE_ATTRS]]}),
         _ValueSensor(
             c, eid, "latest_articles", lambda d: len(d["articles"]), translation_key="latest_articles",
             icon="mdi:newspaper-variant-multiple", unit="articles",
