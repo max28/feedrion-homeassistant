@@ -29,28 +29,49 @@ const FONTS = join(HERE, "fonts");
 const FROZEN_NOW = "2026-10-27T18:30:00+01:00";
 const TZ = "Europe/Paris";
 
-// One city per language, and Home Assistant's own word for "partly cloudy".
+// One city per language, Home Assistant's own word for "partly cloudy", and
+// invented headlines: two saved pages and two alerts on one keyword.
 const LANGS = {
-  en: { city: "London", partly: "Partly cloudy" },
-  fr: { city: "Paris", partly: "Partiellement nuageux" },
-  es: { city: "Madrid", partly: "Parcialmente nublado" },
-  de: { city: "Berlin", partly: "Teilweise bewölkt" },
-  pt: { city: "Lisboa", partly: "Parcialmente nublado" },
-  ru: { city: "Москва", partly: "Переменная облачность" },
-  ja: { city: "東京", partly: "晴れ時々曇り" },
-  zh: { city: "北京", partly: "多云" },
-  hi: { city: "नई दिल्ली", partly: "आंशिक रूप से बादल" },
-  bn: { city: "ঢাকা", partly: "আংশিক মেঘলা" },
-  id: { city: "Jakarta", partly: "Berawan sebagian" },
-  ar: { city: "القاهرة", partly: "غائم جزئياً" },
-  ur: { city: "کراچی", partly: "جزوی ابر آلود" },
-  nl: { city: "Amsterdam", partly: "Gedeeltelijk bewolkt" },
-  it: { city: "Roma", partly: "Parzialmente nuvoloso" },
-  ko: { city: "서울", partly: "구름 조금" },
-  pl: { city: "Warszawa", partly: "Częściowe zachmurzenie" },
-  vi: { city: "Hà Nội", partly: "Có mây một phần" },
-  uk: { city: "Київ", partly: "Мінлива хмарність" },
-  tr: { city: "İstanbul", partly: "Parçalı bulutlu" },
+  en: { city: "London", partly: "Partly cloudy", saved: ["How to grow tomatoes on a balcony", "The best night trains in Europe"], keyword: "Mars",
+    alerts: ["Rover finds traces of an ancient lake on Mars", "A new date for the first crewed flight to Mars"] },
+  fr: { city: "Paris", partly: "Partiellement nuageux", saved: ["Faire pousser des tomates sur un balcon", "Les plus beaux trains de nuit d'Europe"], keyword: "Mars",
+    alerts: ["Un rover trouve les traces d'un ancien lac sur Mars", "Une nouvelle date pour le premier vol habité vers Mars"] },
+  es: { city: "Madrid", partly: "Parcialmente nublado", saved: ["Cómo cultivar tomates en el balcón", "Los mejores trenes nocturnos de Europa"], keyword: "Marte",
+    alerts: ["Un rover halla restos de un antiguo lago en Marte", "Nueva fecha para el primer vuelo tripulado a Marte"] },
+  de: { city: "Berlin", partly: "Teilweise bewölkt", saved: ["Tomaten auf dem Balkon ziehen", "Die schönsten Nachtzüge Europas"], keyword: "Mars",
+    alerts: ["Rover findet Spuren eines alten Sees auf dem Mars", "Neuer Termin für den ersten bemannten Flug zum Mars"] },
+  pt: { city: "Lisboa", partly: "Parcialmente nublado", saved: ["Como cultivar tomates na varanda", "Os melhores comboios noturnos da Europa"], keyword: "Marte",
+    alerts: ["Rover encontra vestígios de um antigo lago em Marte", "Nova data para o primeiro voo tripulado a Marte"] },
+  ru: { city: "Москва", partly: "Переменная облачность", saved: ["Как вырастить помидоры на балконе", "Лучшие ночные поезда Европы"], keyword: "Марс",
+    alerts: ["Марсоход нашёл следы древнего озера на Марсе", "Новая дата первого пилотируемого полёта на Марс"] },
+  ja: { city: "東京", partly: "晴れ時々曇り", saved: ["ベランダでトマトを育てる方法", "ヨーロッパの美しい夜行列車"], keyword: "火星",
+    alerts: ["探査車が火星で古代の湖の痕跡を発見", "火星への初の有人飛行、新たな日程"] },
+  zh: { city: "北京", partly: "多云", saved: ["如何在阳台种番茄", "欧洲最美的夜间列车"], keyword: "火星",
+    alerts: ["火星车在火星发现古湖遗迹", "首次载人火星飞行定下新日期"] },
+  hi: { city: "नई दिल्ली", partly: "आंशिक रूप से बादल", saved: ["बालकनी में टमाटर कैसे उगाएँ", "यूरोप की सबसे अच्छी रात की ट्रेनें"], keyword: "मंगल",
+    alerts: ["रोवर को मंगल पर एक प्राचीन झील के निशान मिले", "मंगल की पहली मानव उड़ान की नई तारीख"] },
+  bn: { city: "ঢাকা", partly: "আংশিক মেঘলা", saved: ["বারান্দায় টমেটো চাষের উপায়", "ইউরোপের সেরা রাতের ট্রেন"], keyword: "মঙ্গল",
+    alerts: ["রোভার মঙ্গলে প্রাচীন হ্রদের চিহ্ন পেল", "মঙ্গলে প্রথম মানব অভিযানের নতুন তারিখ"] },
+  id: { city: "Jakarta", partly: "Berawan sebagian", saved: ["Cara menanam tomat di balkon", "Kereta malam terbaik di Eropa"], keyword: "Mars",
+    alerts: ["Rover temukan jejak danau purba di Mars", "Tanggal baru untuk penerbangan berawak pertama ke Mars"] },
+  ar: { city: "القاهرة", partly: "غائم جزئياً", saved: ["كيف تزرع الطماطم في الشرفة", "أجمل قطارات الليل في أوروبا"], keyword: "المريخ",
+    alerts: ["مركبة تعثر على آثار بحيرة قديمة على المريخ", "موعد جديد لأول رحلة مأهولة إلى المريخ"] },
+  ur: { city: "کراچی", partly: "جزوی ابر آلود", saved: ["بالکونی میں ٹماٹر کیسے اگائیں", "یورپ کی بہترین رات کی ٹرینیں"], keyword: "مریخ",
+    alerts: ["روور کو مریخ پر قدیم جھیل کے آثار ملے", "مریخ کی پہلی انسان بردار پرواز کی نئی تاریخ"] },
+  nl: { city: "Amsterdam", partly: "Gedeeltelijk bewolkt", saved: ["Tomaten kweken op je balkon", "De mooiste nachttreinen van Europa"], keyword: "Mars",
+    alerts: ["Rover vindt sporen van een oud meer op Mars", "Nieuwe datum voor de eerste bemande vlucht naar Mars"] },
+  it: { city: "Roma", partly: "Parzialmente nuvoloso", saved: ["Coltivare pomodori sul balcone", "I treni notturni più belli d'Europa"], keyword: "Marte",
+    alerts: ["Un rover trova tracce di un antico lago su Marte", "Nuova data per il primo volo con equipaggio verso Marte"] },
+  ko: { city: "서울", partly: "구름 조금", saved: ["베란다에서 토마토 키우는 법", "유럽 최고의 야간열차"], keyword: "화성",
+    alerts: ["탐사차, 화성에서 고대 호수 흔적 발견", "첫 유인 화성 비행의 새 일정"] },
+  pl: { city: "Warszawa", partly: "Częściowe zachmurzenie", saved: ["Jak uprawiać pomidory na balkonie", "Najpiękniejsze nocne pociągi Europy"], keyword: "Mars",
+    alerts: ["Łazik znalazł ślady dawnego jeziora na Marsie", "Nowa data pierwszego załogowego lotu na Marsa"] },
+  vi: { city: "Hà Nội", partly: "Có mây một phần", saved: ["Cách trồng cà chua ngoài ban công", "Những chuyến tàu đêm đẹp nhất châu Âu"], keyword: "sao Hỏa",
+    alerts: ["Xe tự hành tìm thấy dấu vết hồ cổ trên sao Hỏa", "Ngày mới cho chuyến bay có người lái đầu tiên lên sao Hỏa"] },
+  uk: { city: "Київ", partly: "Мінлива хмарність", saved: ["Як виростити помідори на балконі", "Найкращі нічні поїзди Європи"], keyword: "Марс",
+    alerts: ["Марсохід знайшов сліди давнього озера на Марсі", "Нова дата першого пілотованого польоту на Марс"] },
+  tr: { city: "İstanbul", partly: "Parçalı bulutlu", saved: ["Balkonda domates nasıl yetiştirilir", "Avrupa'nın en güzel gece trenleri"], keyword: "Mars",
+    alerts: ["Gezgin araç Mars'ta eski bir göl izi buldu", "Mars'a ilk insanlı uçuş için yeni tarih"] },
 };
 const RTL = new Set(["ar", "ur"]);
 
@@ -181,7 +202,41 @@ function setup({ lang, copy, now, icons }) {
     "sensor.feedrion_usd_jpy": { state: "148.37", attributes: { friendly_name: "USD/JPY", symbol: "USD/JPY", change_pct: -0.28, unit_of_measurement: "JPY" } },
     "sensor.feedrion_gbp_usd": { state: "1.2718", attributes: { friendly_name: "GBP/USD", symbol: "GBP/USD", change_pct: 0.27, unit_of_measurement: "USD" } },
     "sensor.feedrion_unread_articles": { state: "42", attributes: {} },
+    "sensor.feedrion_saved_articles": {
+      state: "7",
+      attributes: {
+        friendly_name: "Feedrion Saved articles",
+        articles: copy.saved.map((title, i) => ({
+          id: 200 + i, title, feed: ["Green Corner", "Rail Journal"][i], url: `https://feedrion.example/s${i}`,
+          published_at: new Date(now.getTime() - (i + 1) * 26 * 3600000).toISOString(),
+        })),
+      },
+    },
+    "sensor.feedrion_unseen_alerts": {
+      state: "1",
+      attributes: {
+        friendly_name: "Feedrion Unseen alerts",
+        alerts: copy.alerts.map((title, i) => ({
+          id: 300 + i, title, feed: "Space Today", keyword: copy.keyword, seen: i > 0,
+          url: `https://feedrion.example/a${i}`,
+          matched_at: new Date(now.getTime() - (i * 20 + 1) * 3600000).toISOString(),
+        })),
+      },
+    },
   };
+  // The registry, as Home Assistant serves it: what lets the cards find their
+  // sensors, and the "Feedrion" device name every friendly name starts with.
+  const entities = {};
+  for (const [id, key] of [["sensor.feedrion_episodes_to_watch", "episodes_to_watch"],
+    ["sensor.feedrion_next_episode", "next_episode"], ["sensor.feedrion_unread_articles", "unread"],
+    ["sensor.feedrion_saved_articles", "saved"], ["sensor.feedrion_unseen_alerts", "alerts"],
+    ["weather.feedrion_city", null], ["sensor.feedrion_eur_usd", null], ["sensor.feedrion_usd_jpy", null],
+    ["sensor.feedrion_gbp_usd", null]]) {
+    entities[id] = { entity_id: id, platform: "feedrion", device_id: "feedrion", translation_key: key };
+  }
+  for (const id of ["weather.feedrion_city", "sensor.feedrion_eur_usd", "sensor.feedrion_usd_jpy", "sensor.feedrion_gbp_usd"]) {
+    states[id].attributes.friendly_name = `Feedrion ${states[id].attributes.friendly_name}`;
+  }
   const forecast = [
     ["partlycloudy", 16, 8], ["rainy", 13, 9], ["cloudy", 12, 7], ["sunny", 15, 6], ["sunny", 17, 9],
   ].map(([condition, temperature, templow], i) => ({ datetime: day(i), condition, temperature, templow }));
@@ -189,7 +244,8 @@ function setup({ lang, copy, now, icons }) {
     language: lang,
     locale: { language: lang },
     states,
-    entities: {},
+    entities,
+    devices: { feedrion: { name: "Feedrion" } },
     localize: (key) => (key.endsWith(".partlycloudy") ? copy.partly : ""),
     callService: () => Promise.resolve(),
     connection: {
@@ -207,9 +263,11 @@ function setup({ lang, copy, now, icons }) {
     document.getElementById(col).append(el);
   };
   add("c1", "feedrion-tv-card", { mode: "to_watch", max_items: 4 });
-  add("c1", "feedrion-tv-card", { mode: "upcoming", max_items: 3 });
+  add("c1", "feedrion-upcoming-card", { max_items: 3 });
+  add("c1", "feedrion-saved-card", { max_items: 2, show_images: false });
   add("c2", "feedrion-weather-card", { entity: "weather.feedrion_city", forecast: "daily", forecast_items: 5 });
   add("c2", "feedrion-markets-card", {});
+  add("c2", "feedrion-alerts-card", { max_items: 2, show_images: false });
   add("c2", "feedrion-unread-card", {});
 }
 
@@ -229,7 +287,7 @@ async function main() {
   try {
     for (const lang of langs) {
       const context = await browser.newContext({
-        viewport: { width: 1040, height: 900 }, deviceScaleFactor: 2, timezoneId: TZ, locale: lang,
+        viewport: { width: 1040, height: 1400 }, deviceScaleFactor: 2, timezoneId: TZ, locale: lang,
       });
       const page = await context.newPage();
       await page.clock.setFixedTime(new Date(FROZEN_NOW));
