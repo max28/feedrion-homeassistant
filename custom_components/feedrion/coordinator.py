@@ -34,7 +34,7 @@ from .const import (
     STATE_INTERVAL,
     STOCK_MIN_INTERVAL,
 )
-from .stocks import DAILY_LIMIT, Quote, QuoteError, fetch_quote
+from .stocks import DAILY_LIMIT, Quote, QuoteError, fetch_quote, provider_id
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -202,7 +202,7 @@ class StocksCoordinator(DataUpdateCoordinator[dict[str, Quote]]):
         for stock in self.symbols():
             if self._spent >= budget:
                 break
-            symbol = stock["symbol"]
+            symbol = provider_id(stock)
             self._spent += 1
             try:
                 quotes[stock["id"]] = await fetch_quote(session, self.provider or "", self.key or "", symbol)

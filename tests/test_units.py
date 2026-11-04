@@ -14,6 +14,7 @@ from custom_components.feedrion.stocks import (
     parse_alphavantage,
     parse_eodhd,
     parse_twelvedata,
+    provider_id,
 )
 from custom_components.feedrion.weather import condition
 
@@ -48,6 +49,18 @@ def test_quotes() -> None:
     assert e.price == 31.2
     with pytest.raises(QuoteError):
         parse_eodhd({"close": 0})
+    with pytest.raises(QuoteError):
+        parse_eodhd({"close": "NA", "timestamp": "NA"})
+    # EODHD may answer a one-item list, and a 0 % the previous close contradicts.
+    g = parse_eodhd([{"close": 61.5, "change_p": 0, "previousClose": 60.0, "timestamp": 1761400000}])
+    assert g.price == 61.5 and round(g.change_pct, 2) == 2.5
+
+
+def test_a_stock_is_quoted_by_its_provider_id_not_its_bare_ticker() -> None:
+    # `GLE` alone is quoted by EODHD on a US exchange: another company.
+    assert provider_id({"id": "GLE.PA", "symbol": "GLE"}) == "GLE.PA"
+    assert provider_id({"id": "AI:XPAR", "symbol": "AI"}) == "AI:XPAR"
+    assert provider_id({"id": "", "symbol": "AAPL"}) == "AAPL"
 
 
 def test_episode_events() -> None:
@@ -58,3 +71,19 @@ def test_episode_events() -> None:
                          "name": "Pilot", "aired": "2026-11-02"})
     assert day.start == date(2026, 11, 2) and day.summary.endswith("· Pilot")
     assert episode_event({"show_name": "X", "season": 1, "number": 1, "episode_id": 1}) is None
+
+
+async def test_the_request_carries_the_provider_id(hass, aioclient_mock) -> None:
+    from homeassistant.helpers.aiohttp_client import async_get_clientsession
+
+    from custom_components.feedrion.stocks import fetch_quote
+
+    aioclient_mock.get("https://eodhd.com/api/real-time/GLE.PA",
+                       json={"close": 61.5, "change_p": 1.2, "timestamp": 1761400000})
+    aioclient_mock.get("https://api.twelvedata.com/quote",
+                       json={"close": "180.0", "percent_change": "0.4", "currency": "EUR"})
+    session = async_get_clientsession(hass)
+    assert (await fetch_quote(session, "eodhd", "k", "GLE.PA")).price == 61.5
+    await fetch_quote(session, "twelvedata", "k", "AI:XPAR")
+    params = aioclient_mock.mock_calls[-1][1].query
+    assert params["symbol"] == "AI" and params["mic_code"] == "XPAR"
