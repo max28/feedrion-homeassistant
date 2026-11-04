@@ -82,17 +82,38 @@ def parse_alphavantage(body: Any) -> Quote:
 
 
 def parse_eodhd(body: Any) -> Quote:
+    if isinstance(body, list) and body:
+        body = body[0]
     if not isinstance(body, dict):
         raise QuoteError("invalid answer")
+    # An unknown ticker is not a 404 here: every field says "NA".
     price = _num(body.get("close"))
     if price is None or price == 0:
         raise QuoteError("unknown symbol")
-    return Quote(price, _num(body.get("change_p")), None, _when(body.get("timestamp")))
+    change = _num(body.get("change_p"))
+    previous = _num(body.get("previousClose"))
+    # A 0 % (or no figure) that the previous close contradicts is not believed.
+    if previous and (change is None or (change == 0 and previous != price)):
+        change = (price - previous) / previous * 100
+    return Quote(price, change, None, _when(body.get("timestamp")))
+
+
+def provider_id(stock: dict[str, Any]) -> str:
+    """What the provider needs to quote a stock: its id (`GLE.PA` for EODHD,
+    `AI:XPAR` for Twelve Data), never the bare ticker — `GLE` alone is quoted
+    on a US exchange, i.e. another company. The ticker is the fallback for a
+    stock stored without an id."""
+    return str(stock.get("id") or stock.get("symbol") or "")
 
 
 async def fetch_quote(session: aiohttp.ClientSession, provider: str, key: str, symbol: str) -> Quote:
     if provider == "twelvedata":
-        url, params, parse = "https://api.twelvedata.com/quote", {"symbol": symbol, "apikey": key}, parse_twelvedata
+        # `SYMBOL:MIC` is Feedrion's spelling; Twelve Data takes the two apart.
+        ticker, _, mic = symbol.partition(":")
+        params = {"symbol": ticker, "apikey": key}
+        if mic:
+            params["mic_code"] = mic
+        url, parse = "https://api.twelvedata.com/quote", parse_twelvedata
     elif provider == "alphavantage":
         url = "https://www.alphavantage.co/query"
         params = {"function": "GLOBAL_QUOTE", "symbol": symbol, "apikey": key}
