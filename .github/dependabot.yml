@@ -2,7 +2,17 @@ version: 2
 updates:
   - package-ecosystem: github-actions
     directory: /
-    schedule: { interval: monthly }
+    schedule:
+      # Same slot as the main Feedrion repository: one review session a week.
+      interval: weekly
+      day: friday
+      time: "22:00"
+      timezone: Europe/Paris
   - package-ecosystem: pip
     directory: /
-    schedule: { interval: monthly }
+    schedule:
+      # Same slot as the main Feedrion repository: one review session a week.
+      interval: weekly
+      day: friday
+      time: "22:00"
+      timezone: Europe/Paris
