@@ -107,6 +107,8 @@ async def test_a_rotated_refresh_token_is_stored(
     aioclient_mock.get(f"{HA}/articles", json=[ARTICLE])
     aioclient_mock.get(f"{HA}/tv/to-watch", json=[])
     aioclient_mock.get(f"{HA}/tv/upcoming", json=[])
+    aioclient_mock.get(f"{HA}/movies/to-watch", json=[])
+    aioclient_mock.get(f"{HA}/movies/upcoming", json=[])
     aioclient_mock.get(f"{HA}/alerts", json=[])
     aioclient_mock.get(f"{HA}/events", json={"cursor": "a1|m1", "events": []})
     await _setup(hass, entry)

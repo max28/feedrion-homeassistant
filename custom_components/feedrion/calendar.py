@@ -1,4 +1,5 @@
-"""Upcoming: the episodes announced for the shows the reader follows."""
+"""Upcoming: the episodes announced for the shows the reader follows, and the
+releases of the films they wait for."""
 
 from __future__ import annotations
 
@@ -38,6 +39,18 @@ def episode_event(e: dict[str, Any]) -> CalendarEvent | None:
     return CalendarEvent(start=start, end=end, summary=label, uid=uid)
 
 
+def movie_event(m: dict[str, Any]) -> CalendarEvent | None:
+    """A film's release: an all-day event on the reader's country's day."""
+    day = dt_util.parse_date(m.get("release_date") or "") if m.get("release_date") else None
+    if day is None:
+        return None
+    label = m.get("name") or ""
+    if m.get("year"):
+        label += f" ({m['year']})"
+    return CalendarEvent(start=day, end=day + timedelta(days=1), summary=label,
+                         uid=f"feedrion-movie-{m.get('id')}")
+
+
 def _sort_key(ev: CalendarEvent) -> datetime:
     start = ev.start
     if isinstance(start, datetime):
@@ -58,16 +71,46 @@ class FeedrionUpcoming(FeedrionEntity, CalendarEntity):
 
     @property
     def event(self) -> CalendarEvent | None:
-        now = dt_util.now()
-        for ev in self._events():
-            if _sort_key(ev) >= now or (isinstance(ev.end, datetime) and ev.end > now) or (
-                not isinstance(ev.end, datetime) and dt_util.start_of_local_day(ev.end) > now
-            ):
-                return ev
-        return None
+        return _next(self._events())
 
     async def async_get_events(self, hass: HomeAssistant, start_date: datetime, end_date: datetime) -> list[CalendarEvent]:
         return [ev for ev in self._events() if _sort_key(ev) < end_date and _end(ev) > start_date]
+
+
+class FeedrionMovieReleases(FeedrionEntity, CalendarEntity):
+    """The releases of the followed films not out yet (« Films à venir »)."""
+
+    _attr_translation_key = "movie_releases"
+
+    def __init__(self, coordinator: FeedrionCoordinator, entry_id: str) -> None:
+        super().__init__(coordinator, entry_id, "movie_releases")
+
+    @property
+    def available(self) -> bool:
+        data = self.coordinator.data
+        return super().available and bool(data and (data.state.get("movies") or {}).get("enabled"))
+
+    def _events(self) -> list[CalendarEvent]:
+        data = self.coordinator.data
+        events = [ev for m in (data.movies_upcoming if data else []) if (ev := movie_event(m))]
+        return sorted(events, key=_sort_key)
+
+    @property
+    def event(self) -> CalendarEvent | None:
+        return _next(self._events())
+
+    async def async_get_events(self, hass: HomeAssistant, start_date: datetime, end_date: datetime) -> list[CalendarEvent]:
+        return [ev for ev in self._events() if _sort_key(ev) < end_date and _end(ev) > start_date]
+
+
+def _next(events: list[CalendarEvent]) -> CalendarEvent | None:
+    now = dt_util.now()
+    for ev in events:
+        if _sort_key(ev) >= now or (isinstance(ev.end, datetime) and ev.end > now) or (
+            not isinstance(ev.end, datetime) and dt_util.start_of_local_day(ev.end) > now
+        ):
+            return ev
+    return None
 
 
 def _end(ev: CalendarEvent) -> datetime:
@@ -77,4 +120,8 @@ def _end(ev: CalendarEvent) -> datetime:
 async def async_setup_entry(
     hass: HomeAssistant, entry: FeedrionConfigEntry, async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
-    async_add_entities([FeedrionUpcoming(entry.runtime_data.coordinator, entry.entry_id)])
+    coordinator = entry.runtime_data.coordinator
+    async_add_entities([
+        FeedrionUpcoming(coordinator, entry.entry_id),
+        FeedrionMovieReleases(coordinator, entry.entry_id),
+    ])

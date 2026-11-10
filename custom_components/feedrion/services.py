@@ -29,6 +29,7 @@ SCHEMAS = {
     "save_url": vol.Schema({_ENTRY: cv.string, vol.Required("url"): cv.url,
                             vol.Optional("title"): vol.All(cv.string, vol.Length(max=2000))}),
     "mark_episode_watched": vol.Schema({_ENTRY: cv.string, vol.Required("episode_id"): vol.Coerce(int)}),
+    "mark_movie_watched": vol.Schema({_ENTRY: cv.string, vol.Required("movie_id"): vol.Coerce(int)}),
     "briefing": vol.Schema({_ENTRY: cv.string,
                             vol.Optional("scope", default="all"): vol.Match(r"^(all|saved|starred|feed:\d+|folder:\d+)$"),
                             vol.Optional("limit", default=5): vol.All(vol.Coerce(int), vol.Range(min=1, max=20))}),
@@ -62,6 +63,8 @@ async def _run(hass: HomeAssistant, call: ServiceCall) -> ServiceResponse:
             return {"article_id": saved.get("id"), "title": saved.get("title")} if call.return_response else None
         elif call.service == "mark_episode_watched":
             await client.episode_watched(data["episode_id"])
+        elif call.service == "mark_movie_watched":
+            await client.movie_watched(data["movie_id"])
         elif call.service == "briefing":
             return await client.briefing(data["scope"], data["limit"])
     except FeedrionPremiumRequired as err:

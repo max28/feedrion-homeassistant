@@ -56,6 +56,12 @@ const STRINGS = {
     alerts: "Alerts",
     alerts_empty: "No alert yet",
     no_city: "No city in the Weather extension",
+    movies_to_watch: "Movies to watch",
+    movies_upcoming: "Upcoming movies",
+    movies_to_watch_empty: "No movie to watch",
+    movies_upcoming_empty: "No movie announced",
+    movies_disabled: "No movie followed in Feedrion",
+    runtime: "{n} min",
   },
   fr: {
     to_watch: "Épisodes à voir",
@@ -88,6 +94,12 @@ const STRINGS = {
     alerts: "Alertes",
     alerts_empty: "Aucune alerte pour l'instant",
     no_city: "Aucune ville dans l'extension Météo",
+    movies_to_watch: "Films à voir",
+    movies_upcoming: "Films à venir",
+    movies_to_watch_empty: "Aucun film à voir",
+    movies_upcoming_empty: "Aucun film annoncé",
+    movies_disabled: "Aucun film suivi dans Feedrion",
+    runtime: "{n} min",
   },
   es: {
     to_watch: "Episodios por ver",
@@ -120,6 +132,12 @@ const STRINGS = {
     alerts: "Alertas",
     alerts_empty: "Aún no hay alertas",
     no_city: "Ninguna ciudad en la extensión Tiempo",
+    movies_to_watch: "Películas por ver",
+    movies_upcoming: "Próximas películas",
+    movies_to_watch_empty: "Ninguna película por ver",
+    movies_upcoming_empty: "Ninguna película anunciada",
+    movies_disabled: "Ninguna película seguida en Feedrion",
+    runtime: "{n} min",
   },
   de: {
     to_watch: "Folgen zum Ansehen",
@@ -152,6 +170,12 @@ const STRINGS = {
     alerts: "Alarme",
     alerts_empty: "Noch keine Alarme",
     no_city: "Keine Stadt in der Erweiterung Wetter",
+    movies_to_watch: "Filme zum Ansehen",
+    movies_upcoming: "Kommende Filme",
+    movies_to_watch_empty: "Kein Film zum Ansehen",
+    movies_upcoming_empty: "Kein Film angekündigt",
+    movies_disabled: "Kein Film in Feedrion verfolgt",
+    runtime: "{n} Min.",
   },
   pt: {
     to_watch: "Episódios para ver",
@@ -184,6 +208,12 @@ const STRINGS = {
     alerts: "Alertas",
     alerts_empty: "Nenhum alerta ainda",
     no_city: "Nenhuma cidade na extensão Tempo",
+    movies_to_watch: "Filmes para ver",
+    movies_upcoming: "Próximos filmes",
+    movies_to_watch_empty: "Nenhum filme para ver",
+    movies_upcoming_empty: "Nenhum filme anunciado",
+    movies_disabled: "Nenhum filme acompanhado no Feedrion",
+    runtime: "{n} min",
   },
   ru: {
     to_watch: "Серии к просмотру",
@@ -216,6 +246,12 @@ const STRINGS = {
     alerts: "Оповещения",
     alerts_empty: "Оповещений пока нет",
     no_city: "В расширении «Погода» нет городов",
+    movies_to_watch: "Фильмы к просмотру",
+    movies_upcoming: "Скоро в прокате",
+    movies_to_watch_empty: "Нет фильмов к просмотру",
+    movies_upcoming_empty: "Нет анонсированных фильмов",
+    movies_disabled: "В Feedrion нет отслеживаемых фильмов",
+    runtime: "{n} мин",
   },
   ja: {
     to_watch: "未視聴のエピソード",
@@ -248,6 +284,12 @@ const STRINGS = {
     alerts: "アラート",
     alerts_empty: "アラートはまだありません",
     no_city: "天気拡張機能に都市がありません",
+    movies_to_watch: "見たい映画",
+    movies_upcoming: "公開予定の映画",
+    movies_to_watch_empty: "見る映画はありません",
+    movies_upcoming_empty: "発表された映画はありません",
+    movies_disabled: "Feedrion でフォロー中の映画はありません",
+    runtime: "{n}分",
   },
   zh: {
     to_watch: "待看剧集",
@@ -280,6 +322,12 @@ const STRINGS = {
     alerts: "提醒",
     alerts_empty: "暂无提醒",
     no_city: "天气扩展中没有城市",
+    movies_to_watch: "想看的电影",
+    movies_upcoming: "即将上映",
+    movies_to_watch_empty: "没有想看的电影",
+    movies_upcoming_empty: "没有已公布的电影",
+    movies_disabled: "Feedrion 中没有关注的电影",
+    runtime: "{n} 分钟",
   },
   hi: {
     to_watch: "देखने के लिए एपिसोड",
@@ -312,6 +360,12 @@ const STRINGS = {
     alerts: "अलर्ट",
     alerts_empty: "अभी कोई अलर्ट नहीं",
     no_city: "मौसम एक्सटेंशन में कोई शहर नहीं",
+    movies_to_watch: "देखने को फ़िल्में",
+    movies_upcoming: "आने वाली फ़िल्में",
+    movies_to_watch_empty: "देखने को कोई फ़िल्म नहीं",
+    movies_upcoming_empty: "कोई फ़िल्म घोषित नहीं",
+    movies_disabled: "Feedrion में कोई फ़िल्म फ़ॉलो नहीं",
+    runtime: "{n} मि",
   },
   bn: {
     to_watch: "দেখার মতো পর্ব",
@@ -344,6 +398,12 @@ const STRINGS = {
     alerts: "সতর্কতা",
     alerts_empty: "এখনো কোনো সতর্কতা নেই",
     no_city: "আবহাওয়া এক্সটেনশনে কোনো শহর নেই",
+    movies_to_watch: "দেখার সিনেমা",
+    movies_upcoming: "আসন্ন সিনেমা",
+    movies_to_watch_empty: "দেখার মতো কোনো সিনেমা নেই",
+    movies_upcoming_empty: "কোনো সিনেমা ঘোষিত হয়নি",
+    movies_disabled: "Feedrion-এ কোনো সিনেমা ফলো করা হয়নি",
+    runtime: "{n} মি",
   },
   id: {
     to_watch: "Episode untuk ditonton",
@@ -376,6 +436,12 @@ const STRINGS = {
     alerts: "Peringatan",
     alerts_empty: "Belum ada peringatan",
     no_city: "Tidak ada kota di ekstensi Cuaca",
+    movies_to_watch: "Film untuk ditonton",
+    movies_upcoming: "Film mendatang",
+    movies_to_watch_empty: "Tidak ada film untuk ditonton",
+    movies_upcoming_empty: "Belum ada film diumumkan",
+    movies_disabled: "Tidak ada film yang diikuti di Feedrion",
+    runtime: "{n} mnt",
   },
   ar: {
     to_watch: "حلقات للمشاهدة",
@@ -408,6 +474,12 @@ const STRINGS = {
     alerts: "التنبيهات",
     alerts_empty: "لا توجد تنبيهات بعد",
     no_city: "لا توجد مدينة في إضافة الطقس",
+    movies_to_watch: "أفلام للمشاهدة",
+    movies_upcoming: "أفلام قادمة",
+    movies_to_watch_empty: "لا أفلام للمشاهدة",
+    movies_upcoming_empty: "لا أفلام معلنة",
+    movies_disabled: "لا أفلام متابَعة في Feedrion",
+    runtime: "{n} د",
   },
   ur: {
     to_watch: "دیکھنے کے لیے اقساط",
@@ -440,6 +512,12 @@ const STRINGS = {
     alerts: "الرٹس",
     alerts_empty: "ابھی کوئی الرٹ نہیں",
     no_city: "موسم ایکسٹینشن میں کوئی شہر نہیں",
+    movies_to_watch: "دیکھنے کو فلمیں",
+    movies_upcoming: "آنے والی فلمیں",
+    movies_to_watch_empty: "دیکھنے کو کوئی فلم نہیں",
+    movies_upcoming_empty: "کوئی فلم اعلان شدہ نہیں",
+    movies_disabled: "Feedrion میں کوئی فلم فالو نہیں",
+    runtime: "{n} منٹ",
   },
   nl: {
     to_watch: "Te kijken afleveringen",
@@ -472,6 +550,12 @@ const STRINGS = {
     alerts: "Meldingen",
     alerts_empty: "Nog geen meldingen",
     no_city: "Geen stad in de extensie Weer",
+    movies_to_watch: "Films om te kijken",
+    movies_upcoming: "Binnenkort",
+    movies_to_watch_empty: "Geen film om te kijken",
+    movies_upcoming_empty: "Geen film aangekondigd",
+    movies_disabled: "Geen film gevolgd in Feedrion",
+    runtime: "{n} min",
   },
   it: {
     to_watch: "Episodi da vedere",
@@ -504,6 +588,12 @@ const STRINGS = {
     alerts: "Avvisi",
     alerts_empty: "Ancora nessun avviso",
     no_city: "Nessuna città nell'estensione Meteo",
+    movies_to_watch: "Film da vedere",
+    movies_upcoming: "Film in uscita",
+    movies_to_watch_empty: "Nessun film da vedere",
+    movies_upcoming_empty: "Nessun film annunciato",
+    movies_disabled: "Nessun film seguito su Feedrion",
+    runtime: "{n} min",
   },
   ko: {
     to_watch: "볼 에피소드",
@@ -536,6 +626,12 @@ const STRINGS = {
     alerts: "알림",
     alerts_empty: "아직 알림이 없습니다",
     no_city: "날씨 확장 기능에 도시가 없습니다",
+    movies_to_watch: "볼 영화",
+    movies_upcoming: "개봉 예정 영화",
+    movies_to_watch_empty: "볼 영화가 없습니다",
+    movies_upcoming_empty: "발표된 영화가 없습니다",
+    movies_disabled: "Feedrion에서 팔로우 중인 영화가 없습니다",
+    runtime: "{n}분",
   },
   pl: {
     to_watch: "Odcinki do obejrzenia",
@@ -568,6 +664,12 @@ const STRINGS = {
     alerts: "Alerty",
     alerts_empty: "Brak alertów",
     no_city: "Brak miasta w rozszerzeniu Pogoda",
+    movies_to_watch: "Filmy do obejrzenia",
+    movies_upcoming: "Nadchodzące filmy",
+    movies_to_watch_empty: "Brak filmów do obejrzenia",
+    movies_upcoming_empty: "Brak zapowiedzianych filmów",
+    movies_disabled: "Brak obserwowanych filmów w Feedrion",
+    runtime: "{n} min",
   },
   vi: {
     to_watch: "Tập cần xem",
@@ -600,6 +702,12 @@ const STRINGS = {
     alerts: "Cảnh báo",
     alerts_empty: "Chưa có cảnh báo",
     no_city: "Không có thành phố nào trong tiện ích Thời tiết",
+    movies_to_watch: "Phim lẻ cần xem",
+    movies_upcoming: "Phim lẻ sắp ra mắt",
+    movies_to_watch_empty: "Không có phim lẻ nào cần xem",
+    movies_upcoming_empty: "Chưa có phim lẻ nào được công bố",
+    movies_disabled: "Chưa theo dõi phim lẻ nào trong Feedrion",
+    runtime: "{n} phút",
   },
   uk: {
     to_watch: "Серії до перегляду",
@@ -632,6 +740,12 @@ const STRINGS = {
     alerts: "Сповіщення",
     alerts_empty: "Сповіщень поки немає",
     no_city: "У розширенні «Погода» немає міст",
+    movies_to_watch: "Фільми до перегляду",
+    movies_upcoming: "Незабаром у прокаті",
+    movies_to_watch_empty: "Немає фільмів до перегляду",
+    movies_upcoming_empty: "Немає анонсованих фільмів",
+    movies_disabled: "У Feedrion немає відстежуваних фільмів",
+    runtime: "{n} хв",
   },
   tr: {
     to_watch: "İzlenecek bölümler",
@@ -664,6 +778,12 @@ const STRINGS = {
     alerts: "Uyarılar",
     alerts_empty: "Henüz uyarı yok",
     no_city: "Hava durumu uzantısında şehir yok",
+    movies_to_watch: "İzlenecek filmler",
+    movies_upcoming: "Yakında vizyonda",
+    movies_to_watch_empty: "İzlenecek film yok",
+    movies_upcoming_empty: "Duyurulan film yok",
+    movies_disabled: "Feedrion'da takip edilen film yok",
+    runtime: "{n} dk",
   },
 };
 
@@ -1224,6 +1344,159 @@ class FeedrionUpcomingCard extends FeedrionTvCard {
   }
 }
 
+// ── Films ────────────────────────────────────────────────────────────────────
+
+/** "2021 · 155 min · Science Fiction": the second line of a film row. */
+function movieLine(hass, m) {
+  const parts = [];
+  if (m && m.year) parts.push(String(m.year));
+  if (m && Number(m.runtime) > 0) parts.push(t(hass, "runtime", { n: Number(m.runtime) }));
+  const genre = m && Array.isArray(m.genres) ? m.genres.find((g) => typeof g === "string") : null;
+  if (genre) parts.push(genre);
+  return parts.join(" · ");
+}
+
+/** A film's release is a DAY (the reader's country's), never an instant. */
+function releaseLabel(hass, m, now) {
+  return m && m.release_date ? airLabel(hass, { aired: m.release_date }, now) : "";
+}
+
+/** Feedrion's « Films » extension: to watch, or upcoming — the same rows as
+ * the TV card, built from the movie sensors' ``movies`` attribute. */
+class FeedrionMoviesCard extends FeedrionBaseCard {
+  static getStubConfig() {
+    return { mode: "to_watch" };
+  }
+
+  static getConfigForm() {
+    return {
+      schema: [
+        { name: "mode", required: true, selector: { select: { mode: "dropdown", options: [
+          { value: "to_watch", label: "To watch" },
+          { value: "upcoming", label: "Upcoming" },
+        ] } } },
+        { name: "title", selector: { text: {} } },
+        { name: "max_items", selector: { number: { min: 1, max: 30, mode: "box" } } },
+        { name: "show_watched_button", selector: { boolean: {} } },
+      ],
+    };
+  }
+
+  setConfig(config) {
+    if (config && config.mode && !["to_watch", "upcoming"].includes(config.mode)) {
+      throw new Error("mode must be to_watch or upcoming");
+    }
+    super.setConfig({ mode: "to_watch", ...config });
+  }
+
+  get _mode() {
+    return this._config.mode === "upcoming" ? "upcoming" : "to_watch";
+  }
+
+  get _entity() {
+    if (this._config.entity) return this._config.entity;
+    return this._mode === "upcoming"
+      ? findEntity(this._hass, "next_movie", "sensor.feedrion_next_movie_release")
+      : findEntity(this._hass, "movies_to_watch", "sensor.feedrion_movies_to_watch");
+  }
+
+  _watched() {
+    return [this._entity];
+  }
+
+  _css() {
+    return TV_CSS;
+  }
+
+  _build(card) {
+    const id = this._entity;
+    const st = this._state(id);
+    const upcoming = this._mode === "upcoming";
+    const attrs = (st && st.attributes) || {};
+    const list = Array.isArray(attrs.movies) ? attrs.movies : [];
+    const count = upcoming ? Number(attrs.upcoming_count) : Number(st && st.state);
+    const all = Number.isFinite(count) ? count : list.length;
+    const key = upcoming ? "movies_upcoming" : "movies_to_watch";
+    const title = this._config.title || `${t(this._hass, key)}${st && st.state !== "unavailable" ? ` (${all})` : ""}`;
+    card.append(this._head(title));
+    if (!st) {
+      card.append(h("div", { class: "empty" }, t(this._hass, "not_found", { e: id })));
+      return;
+    }
+    if (st.state === "unavailable") {
+      card.append(h("div", { class: "empty" }, t(this._hass, "movies_disabled")));
+      return;
+    }
+    const max = Math.max(1, Number(this._config.max_items) || 6);
+    const shown = list.slice(0, max);
+    if (!shown.length) {
+      card.append(h("div", { class: "empty" }, t(this._hass, `${key}_empty`)));
+    } else {
+      card.append(h("div", { class: "rows" }, shown.map((m) => this._row(m))));
+    }
+    card.append(h("div", { class: "foot" }, t(this._hass, "tvdb")));
+  }
+
+  _row(m) {
+    const bg = img(m.backdrop_url, "bg") || img(m.poster_url, "bg blur");
+    const right = [];
+    const pill = this._mode === "upcoming" ? releaseLabel(this._hass, m) : "";
+    if (pill) right.push(h("span", { class: "pill" }, pill));
+    if (this._mode === "to_watch" && this._config.show_watched_button && m.movie_id) {
+      right.push(this._seenButton(m));
+    }
+    const link = m.movie_id ? `https://feedrion.com/extensions/movies/${encodeURIComponent(m.movie_id)}` : null;
+    return h(
+      "div",
+      { class: `row${link ? " clickable" : ""}`, onclick: link ? () => openUrl(link) : null },
+      bg,
+      h("div", { class: "scrim" }),
+      h("div", { class: "fg" },
+        img(m.poster_url, "poster"),
+        h("div", { class: "text" },
+          h("div", { class: "show" }, m.name || ""),
+          h("div", { class: "line" }, movieLine(this._hass, m))),
+        right),
+    );
+  }
+
+  /** Two taps, like an episode's: the first arms it, the second marks the
+   * film watched (it reaches the paired media servers). */
+  _seenButton(m) {
+    const btn = h("button", { class: "seen", type: "button" }, t(this._hass, "watched"));
+    let timer = null;
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      if (!btn.classList.contains("armed")) {
+        btn.classList.add("armed");
+        btn.textContent = t(this._hass, "watched_confirm");
+        timer = setTimeout(() => {
+          btn.classList.remove("armed");
+          btn.textContent = t(this._hass, "watched");
+        }, 3000);
+        return;
+      }
+      clearTimeout(timer);
+      btn.disabled = true;
+      this._hass.callService("feedrion", "mark_movie_watched", { movie_id: Number(m.movie_id) })
+        .catch(() => {
+          btn.disabled = false;
+          btn.classList.remove("armed");
+          btn.textContent = t(this._hass, "watched");
+        });
+    });
+    return btn;
+  }
+
+  getCardSize() {
+    return 1 + Math.min(Number(this._config.max_items) || 6, 6);
+  }
+
+  getGridOptions() {
+    return { columns: 12, min_columns: 6, rows: "auto" };
+  }
+}
+
 // ── Weather ──────────────────────────────────────────────────────────────────
 
 const WEATHER_CSS = `
@@ -1754,6 +2027,7 @@ class FeedrionUnreadCard extends FeedrionBaseCard {
 const CARDS = [
   ["feedrion-tv-card", FeedrionTvCard, "Feedrion · Episodes to watch", "The next episode of each show, like the phone widget."],
   ["feedrion-upcoming-card", FeedrionUpcomingCard, "Feedrion · Upcoming episodes", "What airs next, like the phone widget."],
+  ["feedrion-movies-card", FeedrionMoviesCard, "Feedrion · Movies", "Movies to watch or upcoming, like the episodes."],
   ["feedrion-weather-card", FeedrionWeatherCard, "Feedrion · Weather", "A city with its sky, like the phone widget."],
   ["feedrion-markets-card", FeedrionMarketsCard, "Feedrion · Stocks & currencies", "Currency pairs and My stocks."],
   ["feedrion-articles-card", FeedrionArticlesCard, "Feedrion · Articles", "The newest unread articles."],
@@ -1775,7 +2049,8 @@ if (typeof customElements !== "undefined") {
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
-    STRINGS, t, safeUrl, episodeCode, airDate, groupUpcoming, airLabel, episodeLine, weatherSky,
+    STRINGS, t, safeUrl, episodeCode, airDate, groupUpcoming, airLabel, episodeLine, movieLine,
+    releaseLabel, weatherSky,
     weatherIcon, changeLabel, deg, entityLabel, CARDS: CARDS.map((c) => c[0]),
   };
 }

@@ -58,12 +58,28 @@ def _episode(e: dict[str, Any] | None) -> dict[str, Any] | None:
     }
 
 
+def _movie(m: dict[str, Any] | None) -> dict[str, Any] | None:
+    if not m:
+        return None
+    return {
+        "movie_id": m.get("id"),
+        "name": m.get("name"),
+        "year": m.get("year"),
+        "runtime": m.get("runtime"),
+        "genres": m.get("genres") or [],
+        "release_date": m.get("release_date"),
+        "released": bool(m.get("released")),
+        "poster_url": m.get("poster_url"),
+        "backdrop_url": m.get("backdrop_url"),
+    }
+
+
 class _ValueSensor(FeedrionEntity, SensorEntity):
     """A sensor whose value is read from the state with a function."""
 
     # The lists the dashboard cards draw: current state only, never one copy
     # per update in the recorder's history.
-    _unrecorded_attributes = frozenset({"articles", "alerts", "next", "upcoming"})
+    _unrecorded_attributes = frozenset({"articles", "alerts", "next", "upcoming", "movies"})
 
     def __init__(
         self, coordinator: FeedrionCoordinator, entry_id: str, key: str, value: Callable[[dict], Any],
@@ -88,7 +104,9 @@ class _ValueSensor(FeedrionEntity, SensorEntity):
     def _data(self) -> dict:
         data = self.coordinator.data
         return {"state": data.state, "articles": data.articles, "to_watch": data.to_watch,
-                "upcoming": data.upcoming, "saved": data.saved, "alerts": data.alerts} if data else {}
+                "upcoming": data.upcoming, "saved": data.saved, "alerts": data.alerts,
+                "movies_to_watch": data.movies_to_watch,
+                "movies_upcoming": data.movies_upcoming} if data else {}
 
     def _eval(self, fn: Callable[[dict], Any]) -> Any:
         try:
@@ -127,6 +145,7 @@ def _parse_time(value: Any) -> datetime | None:
 def _fixed_sensors(c: FeedrionCoordinator, eid: str) -> list[SensorEntity]:
     rss = lambda d: d["state"]["rss"]  # noqa: E731
     tv = lambda d: d["state"]["tv"]  # noqa: E731
+    movies = lambda d: d["state"]["movies"]  # noqa: E731
     sensors: list[SensorEntity] = [
         _ValueSensor(c, eid, "unread", lambda d: rss(d)["unread"], translation_key="unread",
                      icon="mdi:rss", unit="articles"),
@@ -163,6 +182,24 @@ def _fixed_sensors(c: FeedrionCoordinator, eid: str) -> list[SensorEntity]:
             },
         ),
         _ValueSensor(
+            c, eid, "movies_to_watch",
+            lambda d: movies(d)["to_watch"] if movies(d) and movies(d).get("enabled") else _MISSING,
+            translation_key="movies_to_watch", icon="mdi:movie-open-play", unit="movies",
+            attrs=lambda d: {"movies": [_movie(m) for m in d["movies_to_watch"][:MAX_EPISODE_ATTRS]]},
+        ),
+        _ValueSensor(
+            c, eid, "next_movie",
+            lambda d: _release_day((movies(d) or {}).get("next_release"))
+            if movies(d) and movies(d).get("enabled") else _MISSING,
+            translation_key="next_movie", icon="mdi:movie-star",
+            device_class=SensorDeviceClass.TIMESTAMP, state_class=None,
+            attrs=lambda d: {
+                **(_movie((movies(d) or {}).get("next_release")) or {}),
+                "upcoming_count": (movies(d) or {}).get("upcoming"),
+                "movies": [_movie(m) for m in d["movies_upcoming"][:MAX_EPISODE_ATTRS]],
+            },
+        ),
+        _ValueSensor(
             c, eid, "ai_quota",
             lambda d: d["state"]["ai"]["used"] if d["state"].get("ai") else _MISSING,
             translation_key="ai_quota", icon="mdi:creation", unit="articles",
@@ -182,6 +219,14 @@ def _next_air(episode: dict | None) -> datetime | None:
         day = dt_util.parse_date(episode["aired"])
         return dt_util.start_of_local_day(day) if day else None
     return None
+
+
+def _release_day(movie: dict | None) -> datetime | None:
+    """A film's release is a DAY (the reader's country's): local midnight."""
+    if not movie or not movie.get("release_date"):
+        return None
+    day = dt_util.parse_date(movie["release_date"])
+    return dt_util.start_of_local_day(day) if day else None
 
 
 def _folder_sensor(c: FeedrionCoordinator, eid: str, folder: dict) -> SensorEntity:
