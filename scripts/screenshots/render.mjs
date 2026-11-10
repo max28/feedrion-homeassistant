@@ -1,6 +1,6 @@
 // Renders the pictures of the Feedrion dashboard cards shown in the README
 // (and on feedrion.com), one per language, from INVENTED data: the shows, the
-// posters and the prices below exist nowhere. The real card module is loaded
+// films, the posters and the prices below exist nowhere. The real card module is loaded
 // as Home Assistant loads it; only `ha-card`, `ha-icon` and the `hass` object
 // are stand-ins.
 //
@@ -83,6 +83,12 @@ const SHOWS = [
   { id: 3, name: "Orbit Nine", title: "ORBIT|NINE", colors: ["#4C1D95", "#0F0A1E"] },
   { id: 4, name: "Midnight Bakery", title: "MIDNIGHT|BAKERY", colors: ["#B45309", "#3B1A08"] },
 ];
+// …and three invented films: two out and not seen yet, one announced.
+const MOVIES = [
+  { id: 5, name: "The Lighthouse", title: "THE|LIGHTHOUSE", colors: ["#9F1239", "#1F0A12"], year: 2026, runtime: 118 },
+  { id: 6, name: "Paper Satellites", title: "PAPER|SATELLITES", colors: ["#047857", "#06261C"], year: 2026, runtime: 104 },
+  { id: 7, name: "Last Train to Avalon", title: "LAST TRAIN|TO AVALON", colors: ["#1D4ED8", "#0A1433"], year: 2026, runtime: 131 },
+];
 const IMG = "https://img.feedrion.example";
 
 function posterSvg(show) {
@@ -135,6 +141,18 @@ function upcoming(now) {
     { s: SHOWS[3], season: 2, number: 1, aired: day(4) },
     { s: SHOWS[3], season: 2, number: 2, aired: day(4) },
   ].map(({ s, ...e }) => ({ show: s.name, show_id: s.id, name: null, ...e, ...art(s) }));
+}
+
+function movies(now) {
+  const day = (d) => {
+    const x = new Date(now.getTime() + d * 86400000);
+    return `${x.getFullYear()}-${String(x.getMonth() + 1).padStart(2, "0")}-${String(x.getDate()).padStart(2, "0")}`;
+  };
+  const row = (m, release_date) => ({ movie_id: m.id, name: m.name, year: m.year, runtime: m.runtime, release_date, ...art(m) });
+  return {
+    toWatch: [row(MOVIES[0], day(-40)), row(MOVIES[1], day(-12))],
+    upcoming: [row(MOVIES[2], day(9))],
+  };
 }
 
 // ── The page ────────────────────────────────────────────────────────────────
@@ -201,6 +219,14 @@ function setup({ lang, copy, now, icons }) {
     "sensor.feedrion_eur_usd": { state: "1.0842", attributes: { friendly_name: "EUR/USD", symbol: "EUR/USD", change_pct: 0.21, unit_of_measurement: "USD" } },
     "sensor.feedrion_usd_jpy": { state: "148.37", attributes: { friendly_name: "USD/JPY", symbol: "USD/JPY", change_pct: -0.28, unit_of_measurement: "JPY" } },
     "sensor.feedrion_gbp_usd": { state: "1.2718", attributes: { friendly_name: "GBP/USD", symbol: "GBP/USD", change_pct: 0.27, unit_of_measurement: "USD" } },
+    "sensor.feedrion_movies_to_watch": {
+      state: String(copy.movies.toWatch.length),
+      attributes: { friendly_name: "Feedrion Movies to watch", movies: copy.movies.toWatch },
+    },
+    "sensor.feedrion_next_movie_release": {
+      state: copy.movies.upcoming[0].release_date,
+      attributes: { friendly_name: "Feedrion Next movie release", upcoming_count: copy.movies.upcoming.length, movies: copy.movies.upcoming },
+    },
     "sensor.feedrion_unread_articles": { state: "42", attributes: {} },
     "sensor.feedrion_saved_articles": {
       state: "7",
@@ -229,7 +255,8 @@ function setup({ lang, copy, now, icons }) {
   const entities = {};
   for (const [id, key] of [["sensor.feedrion_episodes_to_watch", "episodes_to_watch"],
     ["sensor.feedrion_next_episode", "next_episode"], ["sensor.feedrion_unread_articles", "unread"],
-    ["sensor.feedrion_saved_articles", "saved"], ["sensor.feedrion_unseen_alerts", "alerts"],
+    ["sensor.feedrion_saved_articles", "saved"], ["sensor.feedrion_movies_to_watch", "movies_to_watch"],
+    ["sensor.feedrion_next_movie_release", "next_movie"], ["sensor.feedrion_unseen_alerts", "alerts"],
     ["weather.feedrion_city", null], ["sensor.feedrion_eur_usd", null], ["sensor.feedrion_usd_jpy", null],
     ["sensor.feedrion_gbp_usd", null]]) {
     entities[id] = { entity_id: id, platform: "feedrion", device_id: "feedrion", translation_key: key };
@@ -264,11 +291,13 @@ function setup({ lang, copy, now, icons }) {
   };
   add("c1", "feedrion-tv-card", { mode: "to_watch", max_items: 4 });
   add("c1", "feedrion-upcoming-card", { max_items: 3 });
-  add("c1", "feedrion-saved-card", { max_items: 2, show_images: false });
+  add("c1", "feedrion-movies-card", { mode: "to_watch", max_items: 2 });
   add("c2", "feedrion-weather-card", { entity: "weather.feedrion_city", forecast: "daily", forecast_items: 5 });
+  add("c2", "feedrion-movies-card", { mode: "upcoming", max_items: 1 });
   add("c2", "feedrion-markets-card", {});
   add("c2", "feedrion-alerts-card", { max_items: 2, show_images: false });
   add("c2", "feedrion-unread-card", {});
+  add("c2", "feedrion-saved-card", { max_items: 2, show_images: false });
 }
 
 const ICONS = Object.fromEntries(
@@ -293,7 +322,7 @@ async function main() {
       await page.clock.setFixedTime(new Date(FROZEN_NOW));
       await page.route(`${IMG}/**`, (route) => {
         const m = /\/(poster|backdrop)-(\d)\.svg$/.exec(route.request().url());
-        const show = m && SHOWS.find((s) => s.id === Number(m[2]));
+        const show = m && [...SHOWS, ...MOVIES].find((s) => s.id === Number(m[2]));
         if (!show) return route.fulfill({ status: 404 });
         return route.fulfill({ contentType: "image/svg+xml", body: m[1] === "poster" ? posterSvg(show) : backdropSvg(show) });
       });
@@ -308,12 +337,12 @@ async function main() {
         ({ fn, args }) => new Function(`return (${fn})`)()(args),
         {
           fn: setup.toString(),
-          args: { lang, now, icons: ICONS, copy: { ...LANGS[lang], toWatch: TO_WATCH, upcoming: upcoming(now) } },
+          args: { lang, now, icons: ICONS, copy: { ...LANGS[lang], toWatch: TO_WATCH, upcoming: upcoming(now), movies: movies(now) } },
         },
       );
       await page.evaluate(() => document.fonts.ready);
       await page.waitForFunction(() => [...document.images].every((i) => i.complete)
-        && [...document.querySelectorAll("feedrion-tv-card")].every((c) => [...c.shadowRoot.querySelectorAll("img")].every((i) => i.complete)));
+        && [...document.querySelectorAll("feedrion-tv-card, feedrion-movies-card")].every((c) => [...c.shadowRoot.querySelectorAll("img")].every((i) => i.complete)));
       await page.waitForTimeout(150);
       // WebP, encoded by Chromium itself: a fifth of the PNG for the same
       // picture, and every browser (and GitHub) shows it.
