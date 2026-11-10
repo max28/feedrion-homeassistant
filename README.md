@@ -19,7 +19,9 @@ repair notice and its sensors go unavailable until it is.
 | `sensor.feedrion_latest_articles` | The newest unread articles (titles, links, images) in its attributes |
 | `sensor.feedrion_episodes_to_watch`, `sensor.feedrion_next_episode` | TV shows extension |
 | `calendar.feedrion_upcoming_episodes` | Announced episodes (timed when the broadcast hour is known) |
-| `todo.feedrion_saved`, `todo.feedrion_to_watch` | Check an article off = read and out of Saved; check an episode off = watched (reaches Trakt and Simkl too). Add a link to Saved by typing it. |
+| `sensor.feedrion_movies_to_watch`, `sensor.feedrion_next_movie_release` | Movies extension: films released and not watched, and the next release (the films carried in their attributes) |
+| `calendar.feedrion_movie_releases` | The release day of each followed film not out yet (your country's date when known) |
+| `todo.feedrion_saved`, `todo.feedrion_to_watch`, `todo.feedrion_movies_to_watch` | Check an article off = read and out of Saved; check an episode off = watched (reaches Trakt and Simkl too); check a film off = watched. Add a link to Saved by typing it. |
 | `weather.feedrion_<city>` | Each city of the Weather extension, with daily and hourly forecasts (MET Norway, CC BY 4.0) |
 | `sensor.feedrion_<pair>` | Each currency pair of the Stocks & currencies extension |
 | `sensor.feedrion_<stock>` | My stocks, **quoted by Home Assistant itself with your own key** (see below) |
@@ -37,7 +39,7 @@ Connecting or restarting never fires a backlog.
 ### Actions
 
 `feedrion.mark_read`, `feedrion.mark_all_read`, `feedrion.save_url`,
-`feedrion.mark_episode_watched`, and `feedrion.briefing`, which returns the
+`feedrion.mark_episode_watched`, `feedrion.mark_movie_watched`, and `feedrion.briefing`, which returns the
 newest unread headlines as one text — ready for `tts.speak`:
 
 ```yaml
@@ -53,7 +55,7 @@ newest unread headlines as one text — ready for `tts.speak`:
 
 ## Cards
 
-The integration ships eight dashboard cards drawn like the Feedrion phone
+The integration ships nine dashboard cards drawn like the Feedrion phone
 widgets. They are loaded automatically — nothing to add under Dashboards ▸
 Resources — and appear in the card picker as "Feedrion · …". They only read
 the entities above: a card never calls Feedrion.
@@ -62,6 +64,7 @@ the entities above: a card never calls Feedrion.
 |------|-------|
 | `custom:feedrion-tv-card` | Episodes to watch: the show's background and poster behind each row, episodes left (`mode: upcoming` turns it into the next card) |
 | `custom:feedrion-upcoming-card` | Upcoming episodes: air date and time, one show's episodes of the same day grouped |
+| `custom:feedrion-movies-card` | Movies to watch, with the film's background and poster (`mode: upcoming` lists the coming releases and their day; `show_watched_button` adds a two-tap « Watched ») |
 | `custom:feedrion-weather-card` | A `weather.feedrion_…` city on a sky that follows the weather, ↑ max ↓ min, the next days (or hours); without `entity` (or if it no longer exists), your first city |
 | `custom:feedrion-markets-card` | Currency pairs and My stocks, price and change; `rotate: true` turns one at a time like the phone row |
 | `custom:feedrion-articles-card` | The newest unread articles, with images; anti-spoil titles stay masked (`source: saved` or `alerts` for the next two) |

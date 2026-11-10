@@ -1,8 +1,10 @@
-"""Two to-do lists: Saved (read later) and To watch (next episodes).
+"""Three to-do lists: Saved (read later), To watch (next episodes) and Movies
+to watch.
 
 Checking an item off is the app's own action: a saved article is marked read
 and leaves Saved; an episode is marked watched (and reaches Trakt, Simkl and
-any paired media server like any other watch). Adding to Saved takes a link. Nothing else is editable from here.
+any paired media server like any other watch); a film is marked watched too.
+Adding to Saved takes a link. Nothing else is editable from here.
 """
 
 from __future__ import annotations
@@ -96,8 +98,47 @@ class ToWatchList(FeedrionEntity, TodoListEntity):
         await self.coordinator.async_request_refresh()
 
 
+class MoviesToWatchList(FeedrionEntity, TodoListEntity):
+    """The « Films » extension's « À voir »: released films not watched yet."""
+
+    _attr_translation_key = "movies_to_watch_list"
+    _attr_supported_features = TodoListEntityFeature.UPDATE_TODO_ITEM
+
+    def __init__(self, coordinator: FeedrionCoordinator, entry_id: str) -> None:
+        super().__init__(coordinator, entry_id, "todo_movies_to_watch")
+
+    @property
+    def available(self) -> bool:
+        data = self.coordinator.data
+        return super().available and bool(data and (data.state.get("movies") or {}).get("enabled"))
+
+    @property
+    def todo_items(self) -> list[TodoItem]:
+        data = self.coordinator.data
+        items = []
+        for m in data.movies_to_watch if data else []:
+            label = m.get("name") or ""
+            if m.get("year"):
+                label += f" ({m['year']})"
+            items.append(TodoItem(uid=str(m["id"]), summary=label, status=TodoItemStatus.NEEDS_ACTION))
+        return items
+
+    async def async_update_todo_item(self, item: TodoItem) -> None:
+        if item.status != TodoItemStatus.COMPLETED or not item.uid:
+            return
+        try:
+            await self.coordinator.client.movie_watched(int(item.uid))
+        except FeedrionError as err:
+            raise HomeAssistantError(str(err)) from err
+        await self.coordinator.async_request_refresh()
+
+
 async def async_setup_entry(
     hass: HomeAssistant, entry: FeedrionConfigEntry, async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     coordinator = entry.runtime_data.coordinator
-    async_add_entities([SavedList(coordinator, entry.entry_id), ToWatchList(coordinator, entry.entry_id)])
+    async_add_entities([
+        SavedList(coordinator, entry.entry_id),
+        ToWatchList(coordinator, entry.entry_id),
+        MoviesToWatchList(coordinator, entry.entry_id),
+    ])

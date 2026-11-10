@@ -90,11 +90,20 @@
       },
       "ai_quota": {
         "name": "Articles IA ce mois-ci"
+      },
+      "movies_to_watch": {
+        "name": "Films à voir"
+      },
+      "next_movie": {
+        "name": "Prochaine sortie de film"
       }
     },
     "calendar": {
       "upcoming": {
         "name": "Épisodes à venir"
+      },
+      "movie_releases": {
+        "name": "Sorties de films"
       }
     },
     "todo": {
@@ -103,6 +112,9 @@
       },
       "to_watch_list": {
         "name": "À voir"
+      },
+      "movies_to_watch_list": {
+        "name": "Films à voir"
       }
     }
   },
@@ -188,6 +200,20 @@
         "episode_id": {
           "name": "Identifiant d'épisode",
           "description": "Issu de la liste « À voir » ou des capteurs."
+        }
+      }
+    },
+    "mark_movie_watched": {
+      "name": "Marquer un film vu",
+      "description": "Comme le marquer vu dans l'application (atteint aussi les serveurs multimédia appairés).",
+      "fields": {
+        "config_entry_id": {
+          "name": "Compte",
+          "description": "Le compte Feedrion (utile seulement s'il y en a plusieurs)."
+        },
+        "movie_id": {
+          "name": "Identifiant du film",
+          "description": "Depuis la liste Films à voir ou les capteurs."
         }
       }
     },

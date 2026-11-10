@@ -90,11 +90,20 @@
       },
       "ai_quota": {
         "name": "AI articles this month"
+      },
+      "movies_to_watch": {
+        "name": "Movies to watch"
+      },
+      "next_movie": {
+        "name": "Next movie release"
       }
     },
     "calendar": {
       "upcoming": {
         "name": "Upcoming episodes"
+      },
+      "movie_releases": {
+        "name": "Movie releases"
       }
     },
     "todo": {
@@ -103,6 +112,9 @@
       },
       "to_watch_list": {
         "name": "To watch"
+      },
+      "movies_to_watch_list": {
+        "name": "Movies to watch"
       }
     }
   },
@@ -188,6 +200,20 @@
         "episode_id": {
           "name": "Episode id",
           "description": "From the To watch list or the sensors."
+        }
+      }
+    },
+    "mark_movie_watched": {
+      "name": "Mark a movie watched",
+      "description": "Like marking it watched in the app (reaches the paired media servers too).",
+      "fields": {
+        "config_entry_id": {
+          "name": "Account",
+          "description": "The Feedrion account (needed only with several)."
+        },
+        "movie_id": {
+          "name": "Movie id",
+          "description": "From the Movies to watch list or the sensors."
         }
       }
     },

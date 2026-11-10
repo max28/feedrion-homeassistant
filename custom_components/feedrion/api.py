@@ -113,6 +113,15 @@ class FeedrionClient:
             "GET", "/integrations/v1/homeassistant/tv/upcoming", params={"days": str(days)},
         )
 
+    async def movies_to_watch(self) -> list[dict[str, Any]]:
+        return await self._request("GET", "/integrations/v1/homeassistant/movies/to-watch")
+
+    async def movies_upcoming(self) -> list[dict[str, Any]]:
+        return await self._request("GET", "/integrations/v1/homeassistant/movies/upcoming")
+
+    async def movie_watched(self, movie_id: int) -> None:
+        await self._request("POST", f"/integrations/v1/homeassistant/movies/{int(movie_id)}/watched")
+
     async def alerts(self, limit: int = 20) -> list[dict[str, Any]]:
         return await self._request(
             "GET", "/integrations/v1/homeassistant/alerts", params={"limit": str(limit)},

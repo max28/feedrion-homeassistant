@@ -102,3 +102,13 @@ test("upcoming, saved and alerts have their own cards", () => {
     assert.ok(cards.CARDS.includes(tag), tag);
   }
 });
+
+test("a film row says its year, runtime and genre; a release is a day", () => {
+  assert.equal(cards.movieLine(fr, { year: 2021, runtime: 155, genres: ["Science Fiction"] }), "2021 · 155 min · Science Fiction");
+  assert.equal(cards.movieLine(en, { year: 2021 }), "2021");
+  assert.equal(cards.movieLine(en, {}), "");
+  const now = new Date(2026, 9, 25, 12, 0);
+  assert.equal(cards.releaseLabel(fr, { release_date: "2026-10-26" }, now), "Demain");
+  assert.equal(cards.releaseLabel(en, {}, now), "");
+  assert.ok(cards.CARDS.includes("feedrion-movies-card"));
+});

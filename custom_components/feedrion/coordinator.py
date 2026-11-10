@@ -68,6 +68,8 @@ class FeedrionData:
     upcoming: list[dict[str, Any]] = field(default_factory=list)
     saved: list[dict[str, Any]] = field(default_factory=list)
     alerts: list[dict[str, Any]] = field(default_factory=list)
+    movies_to_watch: list[dict[str, Any]] = field(default_factory=list)
+    movies_upcoming: list[dict[str, Any]] = field(default_factory=list)
 
 
 class FeedrionCoordinator(DataUpdateCoordinator[FeedrionData]):
@@ -91,6 +93,11 @@ class FeedrionCoordinator(DataUpdateCoordinator[FeedrionData]):
             to_watch = await self.client.to_watch() if tv.get("enabled") else []
             upcoming = await self.client.upcoming(UPCOMING_DAYS) if tv.get("enabled") else []
             alerts = await self._alerts()
+            # Films (Feedrion's « Films » extension): only when the reader
+            # follows some — an API from before films sends no ``movies``.
+            movies = state.get("movies") or {}
+            movies_to_watch = await self.client.movies_to_watch() if movies.get("enabled") else []
+            movies_upcoming = await self.client.movies_upcoming() if movies.get("enabled") else []
         except FeedrionAuthError as err:
             raise ConfigEntryAuthFailed("The Feedrion session was revoked") from err
         except FeedrionPremiumRequired as err:
@@ -104,7 +111,8 @@ class FeedrionCoordinator(DataUpdateCoordinator[FeedrionData]):
             self.premium_missing = False
             _premium_issue(self.hass, entry, False, None)
         return FeedrionData(state=state, articles=articles, to_watch=to_watch, upcoming=upcoming,
-                            saved=saved, alerts=alerts)
+                            saved=saved, alerts=alerts, movies_to_watch=movies_to_watch,
+                            movies_upcoming=movies_upcoming)
 
     async def _alerts(self) -> list[dict[str, Any]]:
         # An API from before the alerts list answers 404: the alerts card is

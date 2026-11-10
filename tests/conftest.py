@@ -56,6 +56,8 @@ def state_payload(**overrides: Any) -> dict[str, Any]:
                              "currency": "USD", "provider": "twelvedata"}],
         "personal_stocks_provider": "twelvedata",
         "ai": {"level": "ai", "used": 120, "quota": 1200},
+        "movies": {"enabled": True, "to_watch": 1, "upcoming": 1, "next_release": {
+            "id": 22, "name": "Orbit Nine", "year": 2026, "release_date": "2027-03-12", "released": False}},
     }
     payload.update(overrides)
     return payload
@@ -69,6 +71,12 @@ EPISODE = {"show_id": 1, "show_name": "Northwind", "episode_id": 800, "season": 
            "backdrop_url": "https://artworks.example/fanart.jpg", "remaining": 3, "set_aside": False}
 
 
+MOVIE = {"id": 21, "name": "Northwind: The Film", "year": 2026, "runtime": 118, "genres": ["Drama"],
+         "release_date": "2026-04-02", "released": True, "poster_url": None,
+         "backdrop_url": "https://artworks.example/film.jpg"}
+UPCOMING_MOVIE = {**MOVIE, "id": 22, "name": "Orbit Nine", "release_date": "2027-03-12", "released": False}
+
+
 def mock_api(aioclient_mock: AiohttpClientMocker, *, state: dict | None = None, status: int = 200) -> None:
     if status != 200:
         aioclient_mock.get(f"{HA}/state", status=status, json={"detail": "premium_required"})
@@ -77,6 +85,8 @@ def mock_api(aioclient_mock: AiohttpClientMocker, *, state: dict | None = None, 
     aioclient_mock.get(f"{HA}/articles", json=[ARTICLE])
     aioclient_mock.get(f"{HA}/tv/to-watch", json=[EPISODE])
     aioclient_mock.get(f"{HA}/tv/upcoming", json=[state_payload()["tv"]["next_upcoming"]])
+    aioclient_mock.get(f"{HA}/movies/to-watch", json=[MOVIE])
+    aioclient_mock.get(f"{HA}/movies/upcoming", json=[UPCOMING_MOVIE])
     aioclient_mock.get(f"{HA}/alerts", json=[{"article": {**ARTICLE, "id": 102, "title": "Rust 2.0"},
                                               "keyword": "Rust", "seen": False,
                                               "matched_at": "2026-10-25T09:30:00Z"}])
